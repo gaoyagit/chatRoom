@@ -14,7 +14,7 @@ export default class LogIn extends React.Component {
             if (result) {
                 this.props.history.push('chat');
             } else{
-                alert('账号或者密码不正确')
+                alert('账号或者密码不正确!')
             }
         });
     }
