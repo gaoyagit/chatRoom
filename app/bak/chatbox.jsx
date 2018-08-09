@@ -10,7 +10,7 @@ import {
 	logStateInfo,
 	onlineUser,
 	theUserName
-} from './login.jsx';
+} from '../src/components/login.jsx';
 
 console.log('测试导入')
 console.log(xtest)
