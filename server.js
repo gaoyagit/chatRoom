@@ -5,6 +5,7 @@ const server = http.Server(app);
 const io = require('socket.io')(server);
 const querystring = require('querystring');
 const util = require('util');
+const fs =require('fs');
 
 app.use(express.static('app'));
 
@@ -12,18 +13,26 @@ app.use(express.static('app'));
 const onlineUsers = [];
 
 io.on('connection', function(socket) {
-	console.log('connected success');
 	socket.on('login', function(user) {
 		// if (onlineUsers.indexOf(user.userName) === -1) {
-        // 		// 	onlineUsers.push(user.userName);
-        // 		// 	socket.emit('loginState', false);
-        // 		// 	console.log('在线用户：' + onlineUsers);
-        // 		// 	io.emit('loginUser', onlineUsers);
-        // 		// 	socket.name = user.userName;
-        // 		// } else {
-        // 		// 	socket.emit('logstate', 'same')
-        // 		// }
-        socket.emit('loginState', true);
+        	// 	// 	onlineUsers.push(user.userName);
+        	// 	// 	socket.emit('loginState', false);
+        	// 	// 	console.log('在线用户：' + onlineUsers);
+        	// 	// 	io.emit('loginUser', onlineUsers);
+        	// 	// 	socket.name = user.userName;
+        	// 	// } else {
+        	// 	// 	socket.emit('logstate', 'same')
+        	// 	// }
+        // vain为用户名密码为空，success为成功，error为用户名密码错误
+        const loginInfo = JSON.parse(fs.readFileSync('./config/userInfo.json','utf-8'));
+		if(!user.userName|| !user.userPassword){
+            socket.emit('loginState', 'vain');
+		}else if(loginInfo[user.userName] != undefined && loginInfo[user.userName].password == user.userPassword ){
+            socket.emit('loginState', 'success');
+		}else {
+            socket.emit('loginState', 'error');
+        }
+
 	});
 	socket.on('msg', function(msg) {
 		io.emit('msg', msg);
@@ -39,7 +48,29 @@ io.on('connection', function(socket) {
 			io.emit('loginUser', onlineUsers, 'quitinfo')
 		}
 	});
+    socket.on('register', function(registerData) {
+    	//读取文件数据库
+        const registerInfo = JSON.parse(fs.readFileSync('./config/userInfo.json','utf-8'));
+        if(!registerData.userName|| !registerData.userPassword){
+        	socket.emit('registerVain',{
+        		msg:'用户名密码不能为空'
+			})
+		}else if(registerInfo[registerData.userName]!=undefined){
+            socket.emit('registerError', {
+            	msg:'已有相同ID'
+			})
+		}else {
+            registerInfo[registerData.userName]={
+            	name:registerData.userName,
+                password:registerData.userPassword,
+			}
+            //写文件数据库
+			fs.writeFileSync('./config/userInfo.json',new Buffer(JSON.stringify(registerInfo)))
+            socket.emit('registerSuccess', 234)
+        }
+    });
 });
+
 
 /**
  * 服务端连接设置

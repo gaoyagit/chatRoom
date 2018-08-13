@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LogIn from './components/login.jsx';
+import Login from './components/login.jsx';
 import Chat from './components/chat.jsx';
+import Register from './components/register.jsx';
 import {Route,Switch,HashRouter} from 'react-router-dom'
 const About = React.createClass({
     render() {
@@ -12,12 +13,14 @@ const About = React.createClass({
 ReactDOM.render(
     <HashRouter >
         <Switch>
-            <Route exact path="/" component={LogIn}/>
+            <Route exact path="/" component={Login}/>
             <Route path="/chat" component={Chat}/>
+            <Route path="/register" component={Register}/>
         </Switch>
     </HashRouter>
     ,
     document.getElementById('chat'));
+
 
 
 

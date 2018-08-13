@@ -4,7 +4,7 @@
   "description": "react   redux   webpakc  bable  websocket",
   "main": "index.js",
   "scripts": {
-    "start":"webpack --watch",
+    "start": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -26,8 +26,8 @@
     "react-router": "^2.0.0",
     "react-router-dom": "^4.3.1",
     "redux": "^3.3.1",
-    "socket.io": "^1.4.5",
-    "socket.io-client": "^1.4.5",
+    "socket.io": "^2.1.1",
+    "socket.io-client": "^2.1.1",
     "style-loader": "^0.13.0"
   }
 }

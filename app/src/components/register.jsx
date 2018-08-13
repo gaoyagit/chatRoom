@@ -1,10 +1,34 @@
-
 import React from 'react';
+import {Link} from 'react-router-dom'
+import io from 'socket.io-client';
+const socket = io.connect('http://localhost:3000');
 // 事件周期
 export default class Register extends React.Component {
+    constructor(props){
+        super(props);
+        this.state={
+            userName:'',
+            userPassword:''
+        };
 
-    componentDidMount() {
-        //window.history.replaceState(null, 'Login', 'login')
+        socket.on('registerSuccess',()=>{
+            this.props.history.push('/');//跳转
+        })
+
+        socket.on('registerError',function(data){
+            alert(data.msg)
+        })
+
+        socket.on('registerVain',function (data) {
+            alert(data.msg);
+        })
+    }
+
+    handleRegister(){
+        socket.emit('register',{
+            userName:this.state.userName,
+            userPassword:this.state.userPassword,
+        })
     }
     render() {
         return (
@@ -12,7 +36,7 @@ export default class Register extends React.Component {
                 <input
                     type="text"
                     placeholder="ID"
-                    onClick={(e)=>{
+                    onChange={(e)=>{
                         this.setState({
                             userName:e.target.value
                         })
@@ -21,7 +45,7 @@ export default class Register extends React.Component {
                 <input
                     type="password"
                     placeholder="密码"
-                    onClick={(e)=>{
+                    onChange={(e)=>{
                         this.setState({
                             userPassword:e.target.value
                         })
@@ -31,8 +55,11 @@ export default class Register extends React.Component {
                     type="submit"
                     className="btn btn-primary"
                     onClick={()=>{
-                        this.handleRegiser()
+                        this.handleRegister()
                     }}>注册</button>
+                <div>
+                    <Link to='/register'>还没有账号?点击注册</Link>
+                </div>
             </div>
         );
     }

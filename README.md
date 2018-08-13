@@ -27,7 +27,7 @@ run:
 // first
 npm install
 //second
-node start
+npm start
 //third
 open http://localhost:3000 to visit
 ```

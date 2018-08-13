@@ -1,6 +1,7 @@
-import io from 'socket.io-client';
+
 import React from 'react';
 import {Link} from 'react-router-dom'
+import io from 'socket.io-client';
 const socket = io.connect('http://localhost:3000');
 
 export default class LogIn extends React.Component {
@@ -11,10 +12,12 @@ export default class LogIn extends React.Component {
             userPassword:''
         };
         socket.on(`loginState`, result => {
-            if (result) {
+            if (result == 'success') {
                 this.props.history.push('chat');
-            } else{
+            } else if(result == 'error'){
                 alert('账号或者密码不正确!')
+            }else if(result == 'vain'){
+                alert('账号或者密码为空!')
             }
         });
     }
@@ -31,7 +34,7 @@ export default class LogIn extends React.Component {
                 <input
                     type="text"
                     placeholder="ID"
-                    onClick={(e)=>{
+                    onChange={(e)=>{
                         this.setState({
                             userName:e.target.value
                         })
@@ -40,7 +43,7 @@ export default class LogIn extends React.Component {
                 <input
                     type="password"
                     placeholder="密码"
-                    onClick={(e)=>{
+                    onChange={(e)=>{
                         this.setState({
                             userPassword:e.target.value
                         })
