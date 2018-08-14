@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+        #showImg img{
+            width:100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+<input type="file" class="upfile" name="img" id="input"/>
+<div id="showImg"></div>
+</body>
+<script type="text/javascript">
+    function getFileUrl(sourceId) {
+        var url;
+        if (navigator.userAgent.indexOf("MSIE") >= 1) { // IE
+            url = sourceId.value;
+        } else if (navigator.userAgent.indexOf("Firefox") > 0) { // Firefox
+            url = window.URL.createObjectURL(sourceId.files.item(0));
+        } else if (navigator.userAgent.indexOf("Chrome") > 0) { // Chrome
+            url = window.URL.createObjectURL(sourceId.files.item(0));
+        }
+        return url;
+    };
+
+    var oImg=document.createElement('img');
+    var showImg = document.getElementById("showImg");
+    showImg.appendChild(oImg);
+    document.getElementById('input').onchange =function(){
+        oImg.src = getFileUrl(this);
+    }
+</script>
+</html>

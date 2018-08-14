@@ -1,3 +1,4 @@
+import defaultUserAvatar from './app/img/1.jpeg';
 const express = require('express');
 const app = require('express')();
 const http = require('http');
@@ -63,6 +64,7 @@ io.on('connection', function(socket) {
             registerInfo[registerData.userName]={
             	name:registerData.userName,
                 password:registerData.userPassword,
+                // avatar:defaultUserAvatar
 			}
             //写文件数据库
 			fs.writeFileSync('./config/userInfo.json',new Buffer(JSON.stringify(registerInfo)))
