@@ -8,16 +8,18 @@ module.exports = {
         path: __dirname,
         filename: "./build/build.js"
     },
-    extensions: ['', '.js', '.jsx'],
     module: {
         loaders: [{
             test: /\.css$/,
             loader: "style!css"
         }, {
-            test: /.jsx?$/,
+            test: /\.js$|\.jsx$/,
             loader: 'babel-loader',
             exclude: /node_modules/,
         }]
+    },
+    resolve: {
+        extensions: ['.js', '.jsx', '.json', '.scss']
     },
     plugins: [
         new webpack.ProvidePlugin({

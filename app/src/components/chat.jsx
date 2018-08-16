@@ -1,9 +1,9 @@
 import React from 'react';
+import InputBox from './inputBox'
 import {Link} from 'react-router-dom'
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:3000');
 const cookieFunction = require('../../../cookie.js')
-import InputBox from './InputBox'
 // 事件周期
 
 function UserInfo(props){
@@ -17,7 +17,7 @@ function UserInfo(props){
 function UserList(props) {
     return(
         <div className='userListBox'>
-            <input type='text' placeholder="搜索框" className='search'/>
+            <input type='text' placeholder="搜索框21" className='search'/>
             <div className='onlineUser'>
                 <img src='../img/2.jpg'/>&nbsp;&nbsp;我是小黄</div>
             <div className='onlineUser'>

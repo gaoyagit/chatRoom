@@ -40,3 +40,4 @@ jspm_packages
 package-lock.json
 .DS_Store
 app/.DS_Store
+app/build
