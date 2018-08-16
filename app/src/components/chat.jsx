@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:3000');
+const cookieFunction = require('../../../cookie.js');
 // 事件周期
 
 function UserInfo(props){
@@ -33,7 +34,8 @@ function UserList(props) {
 function InputBox(props) {
     return (
         <div className='inputBox'>
-            <textarea className='inputDetails' placeholder='我是输入框'></textarea>
+            <textarea className='inputDetails' placeholder='我是输入框'>
+                </textarea>
             <button className='sendBtn'>发送</button>
         </div>
 
@@ -41,12 +43,24 @@ function InputBox(props) {
 }
 
 function DisplayBox(props) {
-    return <div className='displayBox'>我是显示框</div>
+    return <div className='displayBox'>
+        我是显示框!!!!,{props.name}
+        </div>
 }
 export default class Chat extends React.Component {
 
+    constructor(props){
+        super(props);
+        // this.state={
+        //     userName:cookieFunction.getCookie('userName'),
+        //     userPassword:''
+        // };
+        // console.log(this.state.userName);
+    }
     componentDidMount() {
         //window.history.replaceState(null, 'Login', 'login')
+        // alert(this.props.location.query.userName);
+        alert(cookieFunction.getCookie('userName'));
     }
     render() {
         return (
@@ -56,10 +70,9 @@ export default class Chat extends React.Component {
                     <UserList />
                 </div>
                 <div id='informationBox'>
-                    <DisplayBox />
+                    <DisplayBox name="Runoob" />
                     <InputBox />
                 </div>
-
             </div>
         );
     }

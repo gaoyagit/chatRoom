@@ -2,7 +2,9 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
 import io from 'socket.io-client';
+const cookieFunction = require('../../../cookie.js');
 const socket = io.connect('http://localhost:3000');
+
 
 export default class LogIn extends React.Component {
     constructor(props){
@@ -13,6 +15,7 @@ export default class LogIn extends React.Component {
         };
         socket.on(`loginState`, result => {
             if (result == 'success') {
+                cookieFunction.setCookie('userName',this.state.userName,30);
                 this.props.history.push('chat');
             } else if(result == 'error'){
                 alert('账号或者密码不正确!')
@@ -27,7 +30,7 @@ export default class LogIn extends React.Component {
             'userPassword': this.state.userPassword
         })
     }
-    render() {
+    render(){
         return (
             <div id="loginbox">
                 <h1>欢迎登录聊天室</h1>

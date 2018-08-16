@@ -1,4 +1,3 @@
-import defaultUserAvatar from './app/img/1.jpeg';
 const express = require('express');
 const app = require('express')();
 const http = require('http');
@@ -29,6 +28,7 @@ io.on('connection', function(socket) {
 		if(!user.userName|| !user.userPassword){
             socket.emit('loginState', 'vain');
 		}else if(loginInfo[user.userName] != undefined && loginInfo[user.userName].password == user.userPassword ){
+
             socket.emit('loginState', 'success');
 		}else {
             socket.emit('loginState', 'error');
@@ -64,7 +64,7 @@ io.on('connection', function(socket) {
             registerInfo[registerData.userName]={
             	name:registerData.userName,
                 password:registerData.userPassword,
-                // avatar:defaultUserAvatar
+                avatar:'/Users/554800419qq.com/chatRoom/app/img/1.jpeg',
 			}
             //写文件数据库
 			fs.writeFileSync('./config/userInfo.json',new Buffer(JSON.stringify(registerInfo)))
