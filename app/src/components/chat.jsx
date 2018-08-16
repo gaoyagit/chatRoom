@@ -44,23 +44,23 @@ function InputBox(props) {
 
 function DisplayBox(props) {
     return <div className='displayBox'>
-        我是显示框!!!!,{props.name}
+        我是显示框
         </div>
 }
 export default class Chat extends React.Component {
 
     constructor(props){
         super(props);
-        // this.state={
-        //     userName:cookieFunction.getCookie('userName'),
-        //     userPassword:''
-        // };
-        // console.log(this.state.userName);
+        this.state={
+            userName:cookieFunction.getCookie('userName'),
+            // userPassword:''
+        };
+        console.log(this.state.userName);
     }
     componentDidMount() {
         //window.history.replaceState(null, 'Login', 'login')
         // alert(this.props.location.query.userName);
-        alert(cookieFunction.getCookie('userName'));
+        // alert(cookieFunction.getCookie('userName'));
     }
     render() {
         return (
@@ -70,7 +70,7 @@ export default class Chat extends React.Component {
                     <UserList />
                 </div>
                 <div id='informationBox'>
-                    <DisplayBox name="Runoob" />
+                    <DisplayBox />
                     <InputBox />
                 </div>
             </div>

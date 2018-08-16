@@ -58,11 +58,11 @@
 	
 	var _login2 = _interopRequireDefault(_login);
 	
-	var _chat = __webpack_require__(257);
+	var _chat = __webpack_require__(258);
 	
 	var _chat2 = _interopRequireDefault(_chat);
 	
-	var _register = __webpack_require__(258);
+	var _register = __webpack_require__(259);
 	
 	var _register2 = _interopRequireDefault(_register);
 	
@@ -19821,6 +19821,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var cookieFunction = __webpack_require__(257);
 	var socket = _socket2.default.connect('http://localhost:3000');
 	
 	var LogIn = function (_React$Component) {
@@ -19837,6 +19838,7 @@
 	        };
 	        socket.on('loginState', function (result) {
 	            if (result == 'success') {
+	                cookieFunction.setCookie('userName', _this.state.userName, 30);
 	                _this.props.history.push('chat');
 	            } else if (result == 'error') {
 	                alert('账号或者密码不正确!');
@@ -33816,6 +33818,33 @@
 
 /***/ }),
 /* 257 */
+/***/ (function(module, exports) {
+
+	module.exports = {
+	    setCookie: setCookie,
+	    getCookie: getCookie
+	};
+	function setCookie(cname, cvalue, exdays) {
+	    var d = new Date();
+	    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+	    var expires = "expires=" + d.toGMTString();
+	    document.cookie = cname + "=" + cvalue + "; " + expires;
+	}
+	
+	function getCookie(cname) {
+	    var name = cname + "=";
+	    var ca = document.cookie.split(';');
+	    for (var i = 0; i < ca.length; i++) {
+	        var c = ca[i].trim();
+	        if (c.indexOf(name) == 0) {
+	            return c.substring(name.length, c.length);
+	        }
+	    }
+	    return "";
+	}
+
+/***/ }),
+/* 258 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33845,6 +33874,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var socket = _socket2.default.connect('http://localhost:3000');
+	var cookieFunction = __webpack_require__(257);
 	// 事件周期
 	
 	function UserInfo(props) {
@@ -33916,16 +33946,25 @@
 	var Chat = function (_React$Component) {
 	    _inherits(Chat, _React$Component);
 	
-	    function Chat() {
+	    function Chat(props) {
 	        _classCallCheck(this, Chat);
 	
-	        return _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).call(this, props));
+	
+	        _this.state = {
+	            userName: cookieFunction.getCookie('userName')
+	            // userPassword:''
+	        };
+	        console.log(_this.state.userName);
+	        return _this;
 	    }
 	
 	    _createClass(Chat, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            //window.history.replaceState(null, 'Login', 'login')
+	            // alert(this.props.location.query.userName);
+	            // alert(cookieFunction.getCookie('userName'));
 	        }
 	    }, {
 	        key: 'render',
@@ -33955,7 +33994,7 @@
 	exports.default = Chat;
 
 /***/ }),
-/* 258 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
