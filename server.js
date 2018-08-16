@@ -106,6 +106,9 @@ io.on('connection', function(socket) {
                 msg:'请输入有效值'
             })
 		}else {
+        	if(!messageInfo[messageData.fromUser]){
+                messageInfo[messageData.fromUser] =[];
+			}
             messageInfo[messageData.fromUser].push({
                 message:messageData.message,
                 time:messageData.time,
