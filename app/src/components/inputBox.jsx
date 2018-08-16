@@ -1,8 +1,35 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
+import io from 'socket.io-client';
+const socket = io.connect('http://localhost:3000');
 
 export default class InputBox extends Component {
     constructor(props) {
-        super(props)
+        super(props);
+        this.state={
+            message:'',
+            // fromUser:props.userName,
+            toUser:'大黄',
+            time:'',
+        // (new Date()).toLocaleString()
+        }
+
+        socket.on('inputSuccess',function (data) {
+            alert(data.msg);
+        })
+
+        socket.on('inputVain',function (data) {
+            alert(data.msg);
+        })
+    }
+
+    handleInput(){
+        socket.emit('inputMessage',{
+            message:this.state.message,
+            time:this.state.time,
+            fromUser:this.props.userName,
+            toUser:'大黄',
+        })
     }
 
     render() {
@@ -11,13 +38,18 @@ export default class InputBox extends Component {
         <textarea
             onChange={(e) => {
                 this.setState({
-                    message: e.target.value
+                    message: e.target.value,
+                    time:(new Date()).toLocaleString()
                 })
             }}
             className='inputDetails'
             placeholder='我是输入框'>
         </textarea>
-                <button className='sendBtn'>发送</button>
+                <button
+                    className='sendBtn'
+                    onClick={()=>{
+                        this.handleInput()
+                    }}>发送</button>
             </div>
         )
     }

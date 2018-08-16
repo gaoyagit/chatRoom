@@ -97,7 +97,7 @@ export default class Chat extends React.Component {
                 </div>
                 <div id='informationBox'>
                     <DisplayBox />
-                    <InputBox />
+                    <InputBox userName = {this.state.onlineUser} />
                 </div>
             </div>
         );

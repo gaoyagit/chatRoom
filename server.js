@@ -97,6 +97,29 @@ io.on('connection', function(socket) {
             socket.emit('registerSuccess', 234)
         }
     });
+    socket.on('inputMessage', function(messageData) {
+        //读取文件数据库
+        const messageInfo = JSON.parse(fs.readFileSync('./config/message.json','utf-8'));
+        if(!messageData.message){
+        	//如果用户没有输入信息，点击了发送按钮，则弹出请输入有效值
+            socket.emit('inputVain',{
+                msg:'请输入有效值'
+            })
+		}else {
+            messageInfo[messageData.fromUser].push({
+                message:messageData.message,
+                time:messageData.time,
+                fromUser:messageData.fromUser,
+                toUser:messageData.toUser,
+            })
+            //写文件数据库
+            fs.writeFileSync('./config/message.json',new Buffer(JSON.stringify(messageInfo)))
+            socket.emit('inputSuccess', {
+                msg:'成功'
+			})
+        }
+    });
+
 });
 
 

@@ -19,7 +19,7 @@ module.exports = {
         }]
     },
     resolve: {
-        extensions: ['', '.js', '.jsx', '.json', '.scss']
+        extensions: ['.js', '.jsx', '.json', '.scss']
     },
     plugins: [
         new webpack.ProvidePlugin({
