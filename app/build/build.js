@@ -33865,6 +33865,10 @@
 	
 	var _socket2 = _interopRequireDefault(_socket);
 	
+	var _InputBox = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./InputBox\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var _InputBox2 = _interopRequireDefault(_InputBox);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -33874,6 +33878,8 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var socket = _socket2.default.connect('http://localhost:3000');
+	var cookieFunction = __webpack_require__(257);
+	
 	// 事件周期
 	
 	function UserInfo(props) {
@@ -33885,10 +33891,9 @@
 	            { className: 'userName' },
 	            props.userName
 	        ),
-	        _react2.default.createElement('img', { className: 'userAvatar', src: '../img/1.jpeg' })
+	        _react2.default.createElement('img', { className: 'userAvatar', src: props.userAvatar, alt: '\u6211\u662F\u5934\u50CF' })
 	    );
 	}
-	
 	function UserList(props) {
 	    return _react2.default.createElement(
 	        'div',
@@ -33920,20 +33925,6 @@
 	        )
 	    );
 	}
-	
-	function InputBox(props) {
-	    return _react2.default.createElement(
-	        'div',
-	        { className: 'inputBox' },
-	        _react2.default.createElement('textarea', { className: 'inputDetails', placeholder: '\u6211\u662F\u8F93\u5165\u6846' }),
-	        _react2.default.createElement(
-	            'button',
-	            { className: 'sendBtn' },
-	            '\u53D1\u9001'
-	        )
-	    );
-	}
-	
 	function DisplayBox(props) {
 	    return _react2.default.createElement(
 	        'div',
@@ -33951,8 +33942,8 @@
 	        var _this2 = _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).call(this, props));
 	
 	        _this2.state = {
-	            userName: 'gaoya',
-	            onlineUser: ''
+	            onlineUser: cookieFunction.getCookie('userName'),
+	            userAvatar: ''
 	            // cookieFunction.getCookie('userName'),
 	        };
 	
@@ -33975,14 +33966,19 @@
 	            xmlhttp.onreadystatechange = function () {
 	                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 	                    _this.setState({
-	                        onlineUser: JSON.parse(JSON.stringify(xmlhttp.responseText)).userName
+	                        onlineUser: JSON.parse(xmlhttp.responseText).userName,
+	                        userAvatar: JSON.parse(xmlhttp.responseText).userAvatar
+	
 	                    }, function () {
 	                        console.log("this.state.onlineUser:" + _this.state.onlineUser);
+	                        console.log("this.state.onlineUser:" + _this.state.userAvatar);
 	                    });
 	                    console.log(xmlhttp.responseText);
 	                }
 	            };
-	            xmlhttp.open("GET", "http://127.0.0.1:3000/geCookie", true);
+	            // xmlhttp.open("GET","http://127.0.0.1:3000/geCookie",true);
+	            xmlhttp.open("GET", "http://127.0.0.1:3000/geCookie?userName=" + _this.state.onlineUser, true);
+	
 	            xmlhttp.send();
 	
 	            //window.history.replaceState(null, 'Login', 'login')
@@ -34001,14 +33997,14 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { id: 'userInfoBox' },
-	                    _react2.default.createElement(UserInfo, { userName: this.state.onlineUser }),
+	                    _react2.default.createElement(UserInfo, { userName: this.state.onlineUser, userAvatar: this.state.userAvatar }),
 	                    _react2.default.createElement(UserList, null)
 	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    { id: 'informationBox' },
 	                    _react2.default.createElement(DisplayBox, null),
-	                    _react2.default.createElement(InputBox, null)
+	                    _react2.default.createElement(_InputBox2.default, null)
 	                )
 	            );
 	        }

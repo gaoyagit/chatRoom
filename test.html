@@ -14,6 +14,46 @@
 <div id="showImg"></div>
 </body>
 <script type="text/javascript">
+
+    var url = "https://www.baidu.com/s?ie=utf-8&f=3&rsv_bp=1&tn=baidu&wd=json.parse"
+    var search = url.slice(url.indexOf('?')+1);
+    var searchArray = search.split('&');
+    var searchObj = [];
+
+    searchArray.forEach(function (item,index) {
+        var key = item.split("=")[0];
+        var value = item.split("=")[1];
+        searchObj.push({
+            key:value
+        })
+    })
+
+    for (var i = 0;i<searchObj.length;i++){
+        console.log(searchObj[i].key+":"+searchObj[i].value);
+    }
+    console.log("url.location.search:"+search);
+
+
+    var url = "http://www.taobao.com/index.php?key0=0&key1=1";
+    var obj = parseQueryString(url);
+    function parseQueryString(argu){
+        var str = argu.split('?')[1];
+        var result = {};
+        var temp = str.split('&');
+
+        for(var i=0; i<temp.length; i++)
+        {
+            var temp2 = temp[i].split('=');
+            result[temp2[0]] = temp2[1];
+
+        }
+        return result;
+    }
+
+    console.log(obj);
+
+
+
     function getFileUrl(sourceId) {
         var url;
         if (navigator.userAgent.indexOf("MSIE") >= 1) { // IE

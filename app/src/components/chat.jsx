@@ -2,17 +2,18 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:3000');
+const cookieFunction = require('../../../cookie.js')
+import InputBox from './InputBox'
 // 事件周期
 
 function UserInfo(props){
     return (
         <div className='userBox'>
             <div className='userName'>{props.userName}</div>
-            <img className='userAvatar' src='../img/1.jpeg'></img>
+            <img className='userAvatar' src={props.userAvatar} alt='我是头像'></img>
         </div>
     )
 }
-
 function UserList(props) {
     return(
         <div className='userListBox'>
@@ -29,18 +30,6 @@ function UserList(props) {
     )
     
 }
-
-function InputBox(props) {
-    return (
-        <div className='inputBox'>
-            <textarea className='inputDetails' placeholder='我是输入框'>
-                </textarea>
-            <button className='sendBtn'>发送</button>
-        </div>
-
-    )
-}
-
 function DisplayBox(props) {
     return <div className='displayBox'>
         我是显示框
@@ -51,8 +40,8 @@ export default class Chat extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            userName:'gaoya',
-            onlineUser:'',
+            onlineUser:cookieFunction.getCookie('userName'),
+            userAvatar:'',
                 // cookieFunction.getCookie('userName'),
         };
 
@@ -76,14 +65,19 @@ export default class Chat extends React.Component {
             if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
                 _this.setState({
-                    onlineUser:JSON.parse(JSON.stringify(xmlhttp.responseText)).userName
+                    onlineUser:JSON.parse(xmlhttp.responseText).userName,
+                    userAvatar:JSON.parse(xmlhttp.responseText).userAvatar
+
                 },()=> {
-                        console.log("this.state.onlineUser:"+ _this.state.onlineUser)
+                    console.log("this.state.onlineUser:"+ _this.state.onlineUser)
+                    console.log("this.state.onlineUser:"+ _this.state.userAvatar)
                     })
                 console.log(xmlhttp.responseText);
             }
         }
-        xmlhttp.open("GET","http://127.0.0.1:3000/geCookie",true);
+        // xmlhttp.open("GET","http://127.0.0.1:3000/geCookie",true);
+        xmlhttp.open("GET","http://127.0.0.1:3000/geCookie?userName="+_this.state.onlineUser,true);
+
         xmlhttp.send();
 
         //window.history.replaceState(null, 'Login', 'login')
@@ -98,7 +92,7 @@ export default class Chat extends React.Component {
         return (
             <div id="chatBox">
                 <div id='userInfoBox'>
-                    <UserInfo userName = {this.state.onlineUser}/>
+                    <UserInfo userName = {this.state.onlineUser} userAvatar={this.state.userAvatar}/>
                     <UserList />
                 </div>
                 <div id='informationBox'>

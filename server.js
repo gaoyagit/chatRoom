@@ -14,16 +14,17 @@ app.use(express.static('app'));
 
 // 处理get请求
 router.get('/geCookie', function(req, res) {
-	var cookieInfo = loginInfo['gaoya'];
+	var reqInfo = req.param('userName');//解析用户名
+	var cookieInfo = loginInfo[reqInfo];//找到该用户的所有信息
     res.send({
         'userName':cookieInfo.name,
-        'userAvatar':cookieInfo.avatar,
-        'address':'上海'
+        'userAvatar':cookieInfo.avatar
     });
 });
 
 // 处理get请求
 router.get('/11222', function(req, res) {
+
     res.send({
 		'uid':'uid',
         'username':'j1ohn',
