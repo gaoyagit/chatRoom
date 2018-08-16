@@ -33948,26 +33948,49 @@
 	    function Chat(props) {
 	        _classCallCheck(this, Chat);
 	
-	        var _this = _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).call(this, props));
+	        var _this2 = _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).call(this, props));
 	
-	        _this.state = {
-	            userName: 'gaoya'
-	            // onlineUser:'',
+	        _this2.state = {
+	            userName: 'gaoya',
+	            onlineUser: ''
 	            // cookieFunction.getCookie('userName'),
 	        };
 	
-	        return _this;
+	        return _this2;
 	    }
 	
 	    _createClass(Chat, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
+	            var _this = this;
+	
+	            var xmlhttp;
+	            if (window.XMLHttpRequest) {
+	                //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+	                xmlhttp = new XMLHttpRequest();
+	            } else {
+	                // IE6, IE5 浏览器执行代码
+	                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	            }
+	            xmlhttp.onreadystatechange = function () {
+	                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                    _this.setState({
+	                        onlineUser: JSON.parse(JSON.stringify(xmlhttp.responseText)).userName
+	                    }, function () {
+	                        console.log("this.state.onlineUser:" + _this.state.onlineUser);
+	                    });
+	                    console.log(xmlhttp.responseText);
+	                }
+	            };
+	            xmlhttp.open("GET", "http://127.0.0.1:3000/geCookie", true);
+	            xmlhttp.send();
 	
 	            //window.history.replaceState(null, 'Login', 'login')
 	            // alert(this.props.location.query.userName);
 	            // alert(cookieFunction.getCookie('userName'));
 	
 	            // console.log(getCookieInfo.name);
+	
 	        }
 	    }, {
 	        key: 'render',
@@ -33978,7 +34001,7 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { id: 'userInfoBox' },
-	                    _react2.default.createElement(UserInfo, { userName: this.state.userName }),
+	                    _react2.default.createElement(UserInfo, { userName: this.state.onlineUser }),
 	                    _react2.default.createElement(UserList, null)
 	                ),
 	                _react2.default.createElement(

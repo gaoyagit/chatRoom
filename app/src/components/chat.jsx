@@ -52,24 +52,53 @@ export default class Chat extends React.Component {
         super(props);
         this.state={
             userName:'gaoya',
-            // onlineUser:'',
+            onlineUser:'',
                 // cookieFunction.getCookie('userName'),
         };
 
     }
     componentDidMount() {
+        var _this = this;
+
+        var xmlhttp;
+        if (window.XMLHttpRequest)
+        {
+            //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {
+            // IE6, IE5 浏览器执行代码
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                _this.setState({
+                    onlineUser:JSON.parse(JSON.stringify(xmlhttp.responseText)).userName
+                },()=> {
+                        console.log("this.state.onlineUser:"+ _this.state.onlineUser)
+                    })
+                console.log(xmlhttp.responseText);
+            }
+        }
+        xmlhttp.open("GET","http://127.0.0.1:3000/geCookie",true);
+        xmlhttp.send();
 
         //window.history.replaceState(null, 'Login', 'login')
         // alert(this.props.location.query.userName);
         // alert(cookieFunction.getCookie('userName'));
 
         // console.log(getCookieInfo.name);
+
+
     }
     render() {
         return (
             <div id="chatBox">
                 <div id='userInfoBox'>
-                    <UserInfo userName = {this.state.userName}/>
+                    <UserInfo userName = {this.state.onlineUser}/>
                     <UserList />
                 </div>
                 <div id='informationBox'>

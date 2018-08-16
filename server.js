@@ -6,9 +6,34 @@ const io = require('socket.io')(server);
 const querystring = require('querystring');
 const util = require('util');
 const fs =require('fs');
+var router = express.Router();
+const loginInfo = JSON.parse(fs.readFileSync('./config/userInfo.json','utf-8'));
+
+app.use('/',router);
+app.use(express.static('app'));
+
+// 处理get请求
+router.get('/geCookie', function(req, res) {
+	var cookieInfo = loginInfo['gaoya'];
+    res.send({
+        'userName':cookieInfo.name,
+        'userAvatar':cookieInfo.avatar,
+        'address':'上海'
+    });
+});
+
+// 处理get请求
+router.get('/11222', function(req, res) {
+    res.send({
+		'uid':'uid',
+        'username':'j1ohn',
+        'sex':'man',
+        'address':'上海'
+    });
+});
+
 // const cookieFunction = require('cookie.js')
 
-app.use(express.static('app'));
 
 // 在线用户信息
 const onlineUsers = [];
@@ -29,7 +54,6 @@ io.on('connection', function(socket) {
 		if(!user.userName|| !user.userPassword){
             socket.emit('loginState', 'vain');
 		}else if(loginInfo[user.userName] != undefined && loginInfo[user.userName].password == user.userPassword ){
-
             socket.emit('loginState', 'success');
 		}else {
             socket.emit('loginState', 'error');
