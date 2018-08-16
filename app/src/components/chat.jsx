@@ -2,13 +2,12 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:3000');
-const cookieFunction = require('../../../cookie.js');
 // 事件周期
 
 function UserInfo(props){
     return (
         <div className='userBox'>
-            <div className='userName'>主人</div>
+            <div className='userName'>{props.userName}</div>
             <img className='userAvatar' src='../img/1.jpeg'></img>
         </div>
     )
@@ -52,21 +51,25 @@ export default class Chat extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            userName:cookieFunction.getCookie('userName'),
-            // userPassword:''
+            userName:'gaoya',
+            // onlineUser:'',
+                // cookieFunction.getCookie('userName'),
         };
-        console.log(this.state.userName);
+
     }
     componentDidMount() {
+
         //window.history.replaceState(null, 'Login', 'login')
         // alert(this.props.location.query.userName);
         // alert(cookieFunction.getCookie('userName'));
+
+        // console.log(getCookieInfo.name);
     }
     render() {
         return (
             <div id="chatBox">
                 <div id='userInfoBox'>
-                    <UserInfo />
+                    <UserInfo userName = {this.state.userName}/>
                     <UserList />
                 </div>
                 <div id='informationBox'>

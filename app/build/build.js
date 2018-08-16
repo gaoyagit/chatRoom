@@ -33874,7 +33874,6 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var socket = _socket2.default.connect('http://localhost:3000');
-	var cookieFunction = __webpack_require__(257);
 	// 事件周期
 	
 	function UserInfo(props) {
@@ -33884,7 +33883,7 @@
 	        _react2.default.createElement(
 	            'div',
 	            { className: 'userName' },
-	            '\u4E3B\u4EBA'
+	            props.userName
 	        ),
 	        _react2.default.createElement('img', { className: 'userAvatar', src: '../img/1.jpeg' })
 	    );
@@ -33952,19 +33951,23 @@
 	        var _this = _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).call(this, props));
 	
 	        _this.state = {
-	            userName: cookieFunction.getCookie('userName')
-	            // userPassword:''
+	            userName: 'gaoya'
+	            // onlineUser:'',
+	            // cookieFunction.getCookie('userName'),
 	        };
-	        console.log(_this.state.userName);
+	
 	        return _this;
 	    }
 	
 	    _createClass(Chat, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
+	
 	            //window.history.replaceState(null, 'Login', 'login')
 	            // alert(this.props.location.query.userName);
 	            // alert(cookieFunction.getCookie('userName'));
+	
+	            // console.log(getCookieInfo.name);
 	        }
 	    }, {
 	        key: 'render',
@@ -33975,7 +33978,7 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { id: 'userInfoBox' },
-	                    _react2.default.createElement(UserInfo, null),
+	                    _react2.default.createElement(UserInfo, { userName: this.state.userName }),
 	                    _react2.default.createElement(UserList, null)
 	                ),
 	                _react2.default.createElement(

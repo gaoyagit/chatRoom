@@ -6,6 +6,7 @@ const io = require('socket.io')(server);
 const querystring = require('querystring');
 const util = require('util');
 const fs =require('fs');
+// const cookieFunction = require('cookie.js')
 
 app.use(express.static('app'));
 
