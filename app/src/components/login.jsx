@@ -3,7 +3,7 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import io from 'socket.io-client';
 const cookieFunction = require('../../../cookie.js');
-const socket = io.connect('http://localhost:3000');
+//const socket = io.connect('http://localhost:3000');
 
 
 export default class LogIn extends React.Component {
@@ -13,19 +13,22 @@ export default class LogIn extends React.Component {
             userName:'',
             userPassword:''
         };
-        socket.on(`loginState`, result => {
-            if (result == 'success') {
+        console.log(this.props)
+        this.socket = this.props.socket;
+        this.socket.on(`loginState`, result => {
+            if (result.type == 'success') {
                 cookieFunction.setCookie('userName',this.state.userName,30);
                 this.props.history.push('chat');
-            } else if(result == 'error'){
-                alert('账号或者密码不正确!')
-            }else if(result == 'vain'){
-                alert('账号或者密码为空!')
+            } else if(result.type == 'error'){
+                alert(result.message)
+            }else if(result.type == 'vain'){
+                alert(result.message)
             }
         });
+
     }
     handleLogin(){
-        socket.emit('login', {
+        this.socket.emit('login', {
             'userName': this.state.userName,
             'userPassword': this.state.userPassword
         })

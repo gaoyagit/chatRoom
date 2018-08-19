@@ -1,8 +1,9 @@
 import React from 'react';
 import InputBox from './inputBox'
+import DisplayBox from './displayBox'
 import {Link} from 'react-router-dom'
-import io from 'socket.io-client';
-const socket = io.connect('http://localhost:3000');
+// import io from 'socket.io-client';
+// const socket = io.connect('http://localhost:3000');
 const cookieFunction = require('../../../cookie.js')
 // 事件周期
 
@@ -19,7 +20,7 @@ function UserList(props) {
         <div className='userListBox'>
             <input type='text' placeholder="搜索框21" className='search'/>
             <div className='onlineUser'>
-                <img src='../img/2.jpg'/>&nbsp;&nbsp;我是小黄</div>
+                <img src='../img/1.jpeg'/>&nbsp;&nbsp;我是小黄</div>
             <div className='onlineUser'>
                 <img src='../img/3.jpeg'/>&nbsp;&nbsp;我是小王</div>
             <div className='onlineUser'>
@@ -30,11 +31,7 @@ function UserList(props) {
     )
     
 }
-function DisplayBox(props) {
-    return <div className='displayBox'>
-        我是显示框
-        </div>
-}
+
 export default class Chat extends React.Component {
 
     constructor(props){
@@ -42,13 +39,24 @@ export default class Chat extends React.Component {
         this.state={
             onlineUser:cookieFunction.getCookie('userName'),
             userAvatar:'',
-                // cookieFunction.getCookie('userName'),
+            myselfMessage:'',
+            myselfTime:'',
+            initialData:[],
         };
-
+        this.props.socket.on('initialMessage',(data)=>{
+            this.setState({
+                    initialData:data.initialData,
+                }
+            )
+            console.log(data.initialData)
+            // console.log("data.length"+(data.initialData).length)
+            // // for (var i = 0;i<JSON.stringify(data.initialData).length;i++){
+            // //     console.log(JSON.stringify(data.initialData)[i]);
+            // // }
+        })
     }
     componentDidMount() {
         var _this = this;
-
         var xmlhttp;
         if (window.XMLHttpRequest)
         {
@@ -60,11 +68,11 @@ export default class Chat extends React.Component {
             // IE6, IE5 浏览器执行代码
             xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
         }
-        xmlhttp.onreadystatechange=function()
-        {
+        xmlhttp.onreadystatechange=()=>{
             if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
-                _this.setState({
+                console.log(_this)
+                this.setState({
                     onlineUser:JSON.parse(xmlhttp.responseText).userName,
                     userAvatar:JSON.parse(xmlhttp.responseText).userAvatar
 
@@ -96,8 +104,13 @@ export default class Chat extends React.Component {
                     <UserList />
                 </div>
                 <div id='informationBox'>
-                    <DisplayBox />
-                    <InputBox userName = {this.state.onlineUser} />
+                    <DisplayBox userName = {this.state.onlineUser} message={this.state.initialData} />
+                    <InputBox userName = {this.state.onlineUser}  socket={this.props.socket} onClickChange={(message)=>{
+                        this.state.initialData.push(message)
+                     this.setState({
+                         initialData:this.state.initialData
+                     })
+                    }}/>
                 </div>
             </div>
         );

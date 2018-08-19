@@ -39,7 +39,10 @@ router.get('/11222', function(req, res) {
 // 在线用户信息
 const onlineUsers = [];
 
+// const onlineUsersSocket ={}
+
 io.on('connection', function(socket) {
+	console.log(socket.id)
 	socket.on('login', function(user) {
 		// if (onlineUsers.indexOf(user.userName) === -1) {
         	// 	// 	onlineUsers.push(user.userName);
@@ -49,15 +52,42 @@ io.on('connection', function(socket) {
         	// 	// 	socket.name = user.userName;
         	// 	// } else {
         	// 	// 	socket.emit('logstate', 'same')
-        	// 	// }
+        	// 	// }】
+
+		// if(onlineUsersSocket[user.userName]===undefined){
+         //    onlineUsersSocket[user.userName] = socket;
+		// }
         // vain为用户名密码为空，success为成功，error为用户名密码错误
         const loginInfo = JSON.parse(fs.readFileSync('./config/userInfo.json','utf-8'));
+        //登录时的聊天数据值
+
 		if(!user.userName|| !user.userPassword){
-            socket.emit('loginState', 'vain');
-		}else if(loginInfo[user.userName] != undefined && loginInfo[user.userName].password == user.userPassword ){
-            socket.emit('loginState', 'success');
+            socket.emit('loginState', {
+            	type:'vain',
+				message:'账号或者密码为空!'
+			});
+		}else if(loginInfo[user.userName] != undefined && loginInfo[user.userName].password == user.userPassword){
+
+            const messageInfo = JSON.parse(fs.readFileSync('./config/message.json','utf-8'));
+
+            socket.emit('loginState', {
+                type:'success',
+                message:'',
+
+            });
+
+            //初始状态，用户以前的聊天记录
+            const initialMessage = JSON.parse(fs.readFileSync('./config/message.json','utf-8'));
+
+            console.log('send init')
+            socket.emit('initialMessage',{
+                initialData:initialMessage[user.userName],
+			})
 		}else {
-            socket.emit('loginState', 'error');
+            socket.emit('loginState', {
+            	type:'error',
+				message:'账号或者密码不正确!',
+			});
         }
 
 	});
@@ -67,13 +97,16 @@ io.on('connection', function(socket) {
 		console.log(msg.userName + ':' + msg.message)
 	})
 	socket.on('disconnect', function() {
-		if (onlineUsers.indexOf(socket.name) + 1) {
-			console.log('用户退出:' + socket.name)
-			var i = onlineUsers.indexOf(socket.name)
-			onlineUsers.splice(i, 1);
-			socket.broadcast.emit('quit', socket.name);
-			io.emit('loginUser', onlineUsers, 'quitinfo')
-		}
+		// if (onlineUsers.indexOf(socket.name) + 1) {
+		// 	console.log('用户退出:' + socket.name)
+		// 	var i = onlineUsers.indexOf(socket.name)
+		// 	onlineUsers.splice(i, 1);
+		// 	socket.broadcast.emit('quit', socket.name);
+		// 	io.emit('loginUser', onlineUsers, 'quitinfo')
+		// }
+        // if(onlineUsersSocket[user.userName]!==undefined){
+         //    delete onlineUsersSocket[user.userName];
+        // }
 	});
     socket.on('register', function(registerData) {
     	//读取文件数据库
@@ -90,16 +123,18 @@ io.on('connection', function(socket) {
             registerInfo[registerData.userName]={
             	name:registerData.userName,
                 password:registerData.userPassword,
-                avatar:'/Users/554800419qq.com/chatRoom/app/img/1.jpeg',
+                avatar:'../img/2.jpg',
 			}
             //写文件数据库
 			fs.writeFileSync('./config/userInfo.json',new Buffer(JSON.stringify(registerInfo)))
             socket.emit('registerSuccess', 234)
         }
     });
-    socket.on('inputMessage', function(messageData) {
+    socket.on('sendMessage', function(messageData) {
         //读取文件数据库
         const messageInfo = JSON.parse(fs.readFileSync('./config/message.json','utf-8'));
+        // console.log("messageInfo"+JSON.stringify(messageInfo));
+
         if(!messageData.message){
         	//如果用户没有输入信息，点击了发送按钮，则弹出请输入有效值
             socket.emit('inputVain',{
@@ -120,6 +155,19 @@ io.on('connection', function(socket) {
             socket.emit('inputSuccess', {
                 msg:'成功'
 			})
+
+			socket.emit('sendToMyself',{
+				message:messageInfo[messageData.fromUser]
+			})
+			// const toSocket = onlineUsersSocket[messageData.toUser]
+			// if(toSocket){
+             //    toSocket.emit('receiveMessage',{
+             //        message:messageData.message,
+             //        time:messageData.time,
+             //        fromUser:messageData.fromUser,
+             //        toUser:messageData.toUser,
+			// 	})
+			// }
         }
     });
 

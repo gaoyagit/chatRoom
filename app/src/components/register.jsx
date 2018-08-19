@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
-import io from 'socket.io-client';
-const socket = io.connect('http://localhost:3000');
+//import io from 'socket.io-client';
+//const socket = io.connect('http://localhost:3000');
 // 事件周期
 export default class Register extends React.Component {
     constructor(props){
@@ -10,22 +10,22 @@ export default class Register extends React.Component {
             userName:'',
             userPassword:''
         };
-
-        socket.on('registerSuccess',()=>{
+        this.socket = this.props.socket;
+        this.socket.on('registerSuccess',()=>{
             this.props.history.push('/');//跳转
         })
 
-        socket.on('registerError',function(data){
+        this.socket.on('registerError',function(data){
             alert(data.msg)
         })
 
-        socket.on('registerVain',function (data) {
+        this.socket.on('registerVain',function (data) {
             alert(data.msg);
         })
     }
 
     handleRegister(){
-        socket.emit('register',{
+        this.socket.emit('register',{
             userName:this.state.userName,
             userPassword:this.state.userPassword,
         })

@@ -24,7 +24,7 @@ img{
 .userBox{
     display: flex;
     height: 4rem;
-    padding: 1rem;
+    padding:2rem 1rem;
     align-items: center;
     justify-content: space-between;
 }
