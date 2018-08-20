@@ -5,8 +5,8 @@ import RightDisplay from './rightDisplay'
 import LeftDisplay from './leftDisplay'
 //const socket = io.connect('http://localhost:3000');
 
-export default class DisplayBox extends Component{
-    constructor(props){
+export default class DisplayBox extends Component {
+    constructor(props) {
         super(props);
 
         // this.props.socket.on('sendToMyself',(data)=> {
@@ -23,7 +23,8 @@ export default class DisplayBox extends Component{
         // })
 
     }
-    componentDidMount(){
+
+    componentDidMount() {
         //接收消息
         // socket.on('receiveMessage',function (info) {
         //     this.setState({
@@ -40,22 +41,31 @@ export default class DisplayBox extends Component{
         // })
     }
 
-    render(){
-        return(
-            <div className='displayBox'>
-                {
-                    this.props.message.map((item ,index)=>{
-                        console.log('ja',this.props.userName)
-                        if(item.fromUser == this.props.userName){
-                            return <RightDisplay message={item.message}  />
-                        }else{
-                            return <LeftDisplay message={item.message}  />
-                        }
-                    })
-                }
+    render() {
+        if (this.props.message) {
+            return (
+                <div className='displayBox'>
+                    {
+                        this.props.message.map((item, index) => {
+                            // console.log('ja',this.props.userName)
+                            if (item.fromUser == this.props.userName) {
+                                return <RightDisplay message={item.message}/>
+                            } else {
+                                return <LeftDisplay message={item.message}/>
+                            }
+                        })
+                    }
 
-                {/*<LeftDisplay message={this.state.message}/>*/}
+                    {/*<LeftDisplay message={this.state.message}/>*/}
                 </div>
-        )
+            )
+        } else {
+            return (
+                <div className='displayBox'>
+                    我是显示框
+                </div>
+            )
+
+        }
     }
 }

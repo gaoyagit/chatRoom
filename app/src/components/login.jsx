@@ -1,66 +1,71 @@
-
 import React from 'react';
 import {Link} from 'react-router-dom'
 import io from 'socket.io-client';
+
 const cookieFunction = require('../../../cookie.js');
 //const socket = io.connect('http://localhost:3000');
 
 
 export default class LogIn extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            userName:'',
-            userPassword:''
+        this.state = {
+            userName: '',
+            userPassword: ''
         };
-        console.log(this.props)
+        // console.log(this.props)
         this.socket = this.props.socket;
         this.socket.on(`loginState`, result => {
             if (result.type == 'success') {
-                cookieFunction.setCookie('userName',this.state.userName,30);
+                cookieFunction.setCookie('userName', this.state.userName, 30);
                 this.props.history.push('chat');
-            } else if(result.type == 'error'){
+            } else if (result.type == 'error') {
                 alert(result.message)
-            }else if(result.type == 'vain'){
+            } else if (result.type == 'vain') {
                 alert(result.message)
             }
         });
 
     }
-    handleLogin(){
+
+    handleLogin() {
         this.socket.emit('login', {
             'userName': this.state.userName,
             'userPassword': this.state.userPassword
         })
     }
-    render(){
+
+    render() {
         return (
             <div id="loginbox">
                 <h1>欢迎登录聊天室</h1>
                 <input
                     type="text"
                     placeholder="ID"
-                    onChange={(e)=>{
+                    onChange={(e) => {
                         this.setState({
-                            userName:e.target.value
+                            userName: e.target.value
                         })
                     }}
                     className="form-control"/>
                 <input
                     type="password"
                     placeholder="密码"
-                    onChange={(e)=>{
+                    onChange={(e) => {
+
+
                         this.setState({
-                            userPassword:e.target.value
+                            userPassword: e.target.value
                         })
                     }}
                     className="form-control"/>
                 <button
                     type="submit"
                     className="btn btn-primary"
-                    onClick={()=>{
+                    onClick={() => {
                         this.handleLogin()
-                    }}>登录</button>
+                    }}>登录
+                </button>
                 <div>
                     <Link to='/register'>还没有账号?点击注册</Link>
                 </div>

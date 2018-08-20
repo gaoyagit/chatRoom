@@ -16316,6 +16316,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // import io from 'socket.io-client';
 // const socket = io.connect('http://localhost:3000');
 var cookieFunction = __webpack_require__(77);
+
 // 事件周期
 
 function UserInfo(props) {
@@ -16344,30 +16345,33 @@ var Chat = function (_React$Component) {
             userAvatar: '',
             myselfMessage: '',
             myselfTime: '',
-            initialData: [],
-            onlineUserList: {}
+            receiveData: [],
+            onlineUserList: {},
+            toUser: {} //当前用户和谁在聊天，显示聊天记录
         };
-        _this2.props.socket.on('initialMessage', function (data) {
+        _this2.props.socket.on('receiveMessage', function (data) {
             _this2.setState({
-                initialData: data.initialData
+                receiveData: data.receiveData
             });
-            // console.log(data.initialData)
-            // console.log("data.length"+(data.initialData).length)
-            // // for (var i = 0;i<JSON.stringify(data.initialData).length;i++){
-            // //     console.log(JSON.stringify(data.initialData)[i]);
-            // // }
         });
 
         _this2.props.socket.on('loginUserList', function (data) {
             _this2.setState({
-                onlineUserList: data.userList
+                onlineUserList: data.userList,
+                toUser: data.userList[Object.keys(data.userList)[0]]
             });
+            // console.log("data.msg"+data.userList[Object.keys(data.userList)[0]]);
         });
-        // console.log("this.state.onlineUserList:"+this.state.onlineUserList)
         return _this2;
     }
 
+    //状态值改变的时候渲染
+
+
     _createClass(Chat, [{
+        key: 'componentWillUpdate',
+        value: function componentWillUpdate() {}
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this3 = this;
@@ -16383,7 +16387,7 @@ var Chat = function (_React$Component) {
             }
             xmlhttp.onreadystatechange = function () {
                 if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    console.log(_this);
+                    // console.log(_this)
                     _this3.setState({
                         onlineUser: JSON.parse(xmlhttp.responseText).userName,
                         userAvatar: JSON.parse(xmlhttp.responseText).userAvatar
@@ -16393,6 +16397,12 @@ var Chat = function (_React$Component) {
                         // console.log("this.state.onlineUser:"+ _this.state.userAvatar)
                     });
                     // console.log(xmlhttp.responseText);
+                }
+
+                if (_this.state.onlineUser) {
+                    _this3.setState({
+                        onlineUserList: _this.state.onlineUserList
+                    });
                 }
             };
             // xmlhttp.open("GET","http://127.0.0.1:3000/geCookie",true);
@@ -16407,6 +16417,12 @@ var Chat = function (_React$Component) {
             // console.log(getCookieInfo.name);
 
         }
+
+        //点击用户列表中的一个用户，用来找toUser，以及聊天记录
+
+    }, {
+        key: 'handleDisplay',
+        value: function handleDisplay() {}
     }, {
         key: 'render',
         value: function render() {
@@ -16419,16 +16435,21 @@ var Chat = function (_React$Component) {
                     'div',
                     { id: 'userInfoBox' },
                     _react2.default.createElement(UserInfo, { userName: this.state.onlineUser, userAvatar: this.state.userAvatar }),
-                    _react2.default.createElement(_userList2.default, { onlineUserList: this.state.onlineUserList })
+                    _react2.default.createElement(_userList2.default, {
+                        onlineUserList: this.state.onlineUserList,
+                        onClick: function onClick() {
+                            _this4.handleDisplay(onlineUserList);
+                        }
+                    })
                 ),
                 _react2.default.createElement(
                     'div',
                     { id: 'informationBox' },
-                    _react2.default.createElement(_displayBox2.default, { userName: this.state.onlineUser, message: this.state.initialData }),
+                    _react2.default.createElement(_displayBox2.default, { userName: this.state.onlineUser, message: this.state.receiveData }),
                     _react2.default.createElement(_inputBox2.default, { userName: this.state.onlineUser, socket: this.props.socket, onClickChange: function onClickChange(message) {
-                            _this4.state.initialData.push(message);
+                            _this4.state.receiveData.push(message);
                             _this4.setState({
-                                initialData: _this4.state.initialData
+                                receiveData: _this4.state.receiveData
                             });
                         } })
                 )
@@ -16488,7 +16509,7 @@ var LogIn = function (_React$Component) {
             userName: '',
             userPassword: ''
         };
-        console.log(_this.props);
+        // console.log(this.props)
         _this.socket = _this.props.socket;
         _this.socket.on('loginState', function (result) {
             if (result.type == 'success') {
@@ -16538,6 +16559,7 @@ var LogIn = function (_React$Component) {
                     type: 'password',
                     placeholder: '\u5BC6\u7801',
                     onChange: function onChange(e) {
+
                         _this2.setState({
                             userPassword: e.target.value
                         });
@@ -16855,18 +16877,26 @@ var DisplayBox = function (_Component) {
         value: function render() {
             var _this2 = this;
 
-            return _react2.default.createElement(
-                'div',
-                { className: 'displayBox' },
-                this.props.message.map(function (item, index) {
-                    console.log('ja', _this2.props.userName);
-                    if (item.fromUser == _this2.props.userName) {
-                        return _react2.default.createElement(_rightDisplay2.default, { message: item.message });
-                    } else {
-                        return _react2.default.createElement(_leftDisplay2.default, { message: item.message });
-                    }
-                })
-            );
+            if (this.props.message) {
+                return _react2.default.createElement(
+                    'div',
+                    { className: 'displayBox' },
+                    this.props.message.map(function (item, index) {
+                        // console.log('ja',this.props.userName)
+                        if (item.fromUser == _this2.props.userName) {
+                            return _react2.default.createElement(_rightDisplay2.default, { message: item.message });
+                        } else {
+                            return _react2.default.createElement(_leftDisplay2.default, { message: item.message });
+                        }
+                    })
+                );
+            } else {
+                return _react2.default.createElement(
+                    'div',
+                    { className: 'displayBox' },
+                    '\u6211\u662F\u663E\u793A\u6846'
+                );
+            }
         }
     }]);
 
@@ -17023,10 +17053,6 @@ var LeftDisplay = function (_Component) {
         _classCallCheck(this, LeftDisplay);
 
         return _possibleConstructorReturn(this, (LeftDisplay.__proto__ || Object.getPrototypeOf(LeftDisplay)).call(this, props));
-        // this.state ={
-        //     message:'',
-        //     avatar:'',
-        // }
     }
 
     _createClass(LeftDisplay, [{
@@ -17081,10 +17107,8 @@ var RightDisplay = function (_Component) {
     function RightDisplay(props) {
         _classCallCheck(this, RightDisplay);
 
-        var _this = _possibleConstructorReturn(this, (RightDisplay.__proto__ || Object.getPrototypeOf(RightDisplay)).call(this, props));
-
-        console.log('right', 123123);
-        return _this;
+        return _possibleConstructorReturn(this, (RightDisplay.__proto__ || Object.getPrototypeOf(RightDisplay)).call(this, props));
+        // console.log('right',123123)
     }
 
     _createClass(RightDisplay, [{
@@ -34518,20 +34542,6 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouterDom = __webpack_require__(19);
-
-var _socket = __webpack_require__(27);
-
-var _socket2 = _interopRequireDefault(_socket);
-
-var _rightDisplay = __webpack_require__(139);
-
-var _rightDisplay2 = _interopRequireDefault(_rightDisplay);
-
-var _leftDisplay = __webpack_require__(138);
-
-var _leftDisplay2 = _interopRequireDefault(_leftDisplay);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -34540,10 +34550,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function UserDisplay(props) {
+function SingleUser(props) {
     return _react2.default.createElement(
         'div',
-        { className: 'userListBox' },
+        { className: 'onlineUser' },
         _react2.default.createElement(
             'img',
             { src: '../img/1.jpeg' },
@@ -34559,27 +34569,23 @@ var UserList = function (_Component) {
     function UserList(props) {
         _classCallCheck(this, UserList);
 
-        var _this = _possibleConstructorReturn(this, (UserList.__proto__ || Object.getPrototypeOf(UserList)).call(this, props));
-
-        console.log("this.props.onlineUserList.length:" + props.onlineUserList.toString());
-        // var test = {"gaoya":{"userName":"gaoya"},"大黄":{"userName":"大黄"}}
-        for (var item in _this.props.onlineUserList) {
-            console.log("12ewfhqwnfoq");
-            console.log("1111" + item + " : " + props.onlineUserList[item].userName);
-        }
-
-        console.log("122の3this.props.onlineUserList.length:" + Object.keys(props.onlineUserList));
-
-        return _this;
+        return _possibleConstructorReturn(this, (UserList.__proto__ || Object.getPrototypeOf(UserList)).call(this, props));
     }
 
     _createClass(UserList, [{
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             return _react2.default.createElement(
                 'div',
                 { className: 'userListBox' },
-                _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u684621', className: 'search' })
+                _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u684621', className: 'search' }),
+                Object.keys(this.props.onlineUserList).map(function (key) {
+                    // console.log("111"+this.props.onlineUserList[key].userName);
+                    return _react2.default.createElement(SingleUser, { userName: _this2.props.onlineUserList[key].userName });
+                    // {this.props.onlineUserList[key].userName}
+                })
             );
         }
     }]);

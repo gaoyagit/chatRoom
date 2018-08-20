@@ -1,7 +1,8 @@
-.rightDisplayBox{
+.rightDisplayBox {
     display: flex;
     align-items: center;
 }
+
 .leftDisplay {
     display: flex;
     align-items: center;

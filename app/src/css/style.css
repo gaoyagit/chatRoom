@@ -1,7 +1,7 @@
 button,
 html input[type="button"],
 
-/* 1 */
+    /* 1 */
 
 input[type="reset"],
 input[type="submit"] {
@@ -19,7 +19,6 @@ html input[disabled] {
 textarea {
     overflow: auto;
 }
-
 
 /**
  * custom css
@@ -147,14 +146,17 @@ header ul li a:hover {
     padding: 0.2rem 0.3rem;
     border-radius: 0.3rem;
 }
+
 .userMsg {
     background: #fff;
-    border-radius:5px;
+    border-radius: 5px;
     padding: 0.5rem;
 }
+
 .userMsg p {
-    margin:0.3rem;
+    margin: 0.3rem;
 }
+
 #showmsg {
     width: 85%;
     margin: 0 3%;
@@ -166,9 +168,8 @@ header ul li a:hover {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    margin:0.5rem 0;
+    margin: 0.5rem 0;
 }
-
 
 #showmsg div span {
     color: #000;
@@ -178,10 +179,12 @@ header ul li a:hover {
 #showmsg div span::after {
     content: '：';
 }
+
 #showmsg img {
-    width:80%;
-    height:auto;
+    width: 80%;
+    height: auto;
 }
+
 #submsg {
     height: 10%;
     display: flex;
@@ -196,11 +199,12 @@ header ul li a:hover {
 .thisuser {
     background: #5EC1F7 !important;
     color: #fff;
-    border-radius:5px;
-    padding:0.5rem;
+    border-radius: 5px;
+    padding: 0.5rem;
 }
+
 .thisuser p {
-    margin:0.3rem;
+    margin: 0.3rem;
 }
 
 .tooltip {
@@ -240,7 +244,6 @@ header ul li a:hover {
     height: 103%;
 }
 
-
 /**
  * button style
  */
@@ -273,7 +276,6 @@ header ul li a:hover {
     top: 1px;
 }
 
-
 /**
  * For mobile device
  * @param  {[type]} max-width: 640px         [description]
@@ -284,23 +286,28 @@ header ul li a:hover {
     html {
         font-size: 80%;
     }
+
     header {
         height: 3rem;
     }
+
     header h1 {
         margin-left: 1rem;
         font-size: 1rem;
     }
+
     #mobMenu {
         display: inline;
         margin-left: 1rem;
         font-size: 2rem;
         cursor: pointer;
     }
+
     #chatroom {
         width: 100%;
         height: 100%;
     }
+
     #userlist {
         margin-left: -30%;
         border: 0;
@@ -309,20 +316,25 @@ header ul li a:hover {
         background: #fff;
         position: absolute;
     }
+
     #userlist ul span {
         color: #fff;
         background: #6F6F6F;
     }
+
     #showmsg {
         width: 100%;
         height: 100%;
     }
+
     #chatroom {
         margin-top: 3%;
     }
+
     #submsg {
         height: 5%;
     }
+
     #submsg textarea {
         width: 80%;
         margin-left: 1rem;

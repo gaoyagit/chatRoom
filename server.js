@@ -70,30 +70,16 @@ io.on('connection', function(socket) {
 		}else if(loginInfo[user.userName] != undefined && loginInfo[user.userName].password == user.userPassword){
 			//如果登录成功，将该用户放到onlineUsersList中，用于显示用户列表
             const onlineUserList = JSON.parse(fs.readFileSync('./config/onlineList.json','utf-8'));
+            // console.log("onlineUserList"+(onlineUserList instanceof Array))
             if(!onlineUserList[user.userName]){
                 onlineUserList[user.userName] ={
 					"userName":user.userName,
 				}
 			}
-			// for (let item in onlineUserList ){
-            	// console.log("1111"+item+" : "+onlineUserList[item].userName);
-			// }
+
 
 			//将在线用户写入onlineList.json文件中
             fs.writeFileSync('./config/onlineList.json',new Buffer(JSON.stringify(onlineUserList)))
-
-            // if (onlineUsersList.indexOf(user.userName) === -1) {
-            //     onlineUsersList.push(user.userName);
-            // }
-            //向前端发送所有在线用户信息，并显示
-            socket.emit('loginUserList',{
-            	msg:'所有在线用户信息',
-				userList:onlineUserList
-			})
-
-            // console.log(onlineUsersList+"onlineUsersList");
-            // console.log("onlineUsersList"+onlineUsersList.length);
-
 
             //读取message.json的值
             const messageInfo = JSON.parse(fs.readFileSync('./config/message.json','utf-8'));
@@ -105,12 +91,17 @@ io.on('connection', function(socket) {
             });
 
             //初始状态，用户以前的聊天记录
-            const initialMessage = JSON.parse(fs.readFileSync('./config/message.json','utf-8'));
+            const receiveMessage = JSON.parse(fs.readFileSync('./config/message.json','utf-8'));
 
             // console.log('send init')
-            socket.emit('initialMessage',{
-                initialData:initialMessage[user.userName],
+            socket.emit('receiveMessage',{
+                receiveData:receiveMessage[user.userName],
 			})
+
+            socket.emit('loginUserList',{
+                msg:'所有在线用户信息',
+                userList:onlineUserList,
+            })
 		}else {
             socket.emit('loginState', {
             	type:'error',

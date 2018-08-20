@@ -1,43 +1,36 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
-import io from 'socket.io-client';
-import RightDisplay from './rightDisplay'
-import LeftDisplay from './leftDisplay'
 
-function UserDisplay(props) {
-    return(
-        <div className='userListBox'>
+function SingleUser(props) {
+    return (
+        <div className='onlineUser'>
             <img src='../img/1.jpeg'>&nbsp;&nbsp;{props.userName}</img>
         </div>
     )
 }
-export default class UserList extends Component{
-    constructor(props){
+
+export default class UserList extends Component {
+    constructor(props) {
         super(props)
-
-        console.log("this.props.onlineUserList.length:"+props.onlineUserList.toString());
-        // var test = {"gaoya":{"userName":"gaoya"},"大黄":{"userName":"大黄"}}
-        for(let item in (this.props.onlineUserList)){
-            console.log("12ewfhqwnfoq");
-            console.log("1111"+item+" : "+ props.onlineUserList[item].userName);
-        }
-
-        console.log("122の3this.props.onlineUserList.length:"+Object.keys(props.onlineUserList));
-
     }
-    
-    render(){
-        return(
+
+    render() {
+        return (
             <div className='userListBox'>
                 <input type='text' placeholder="搜索框21" className='search'/>
+                {/*<SingleUser userName="我是大黄"/>*/}
                 {
+                    Object.keys(this.props.onlineUserList).map((key) => {
+                        // console.log("111"+this.props.onlineUserList[key].userName);
+                        return <SingleUser userName={this.props.onlineUserList[key].userName}/>
+                        // {this.props.onlineUserList[key].userName}
+                    })
 
                 }
             </div>
 
         )
     }
-} 
+}
 // function UserList(props) {
 //     return(
 //         <div className='userListBox'>
