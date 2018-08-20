@@ -1,6 +1,7 @@
 import React from 'react';
 import InputBox from './inputBox'
 import DisplayBox from './displayBox'
+import UserList from './userList'
 import {Link} from 'react-router-dom'
 // import io from 'socket.io-client';
 // const socket = io.connect('http://localhost:3000');
@@ -15,22 +16,7 @@ function UserInfo(props){
         </div>
     )
 }
-function UserList(props) {
-    return(
-        <div className='userListBox'>
-            <input type='text' placeholder="搜索框21" className='search'/>
-            <div className='onlineUser'>
-                <img src='../img/1.jpeg'/>&nbsp;&nbsp;我是小黄</div>
-            <div className='onlineUser'>
-                <img src='../img/3.jpeg'/>&nbsp;&nbsp;我是小王</div>
-            <div className='onlineUser'>
-                <img src='../img/4.jpg'/>&nbsp;&nbsp;我是小陈</div>
-            <div className='onlineUser'>
-                <img src='../img/5.jpg'/>&nbsp;&nbsp;我是小赵</div>
-        </div>
-    )
-    
-}
+
 
 export default class Chat extends React.Component {
 
@@ -42,18 +28,26 @@ export default class Chat extends React.Component {
             myselfMessage:'',
             myselfTime:'',
             initialData:[],
+            onlineUserList:{},
         };
         this.props.socket.on('initialMessage',(data)=>{
             this.setState({
                     initialData:data.initialData,
                 }
             )
-            console.log(data.initialData)
+            // console.log(data.initialData)
             // console.log("data.length"+(data.initialData).length)
             // // for (var i = 0;i<JSON.stringify(data.initialData).length;i++){
             // //     console.log(JSON.stringify(data.initialData)[i]);
             // // }
         })
+
+        this.props.socket.on('loginUserList',(data)=>{
+            this.setState({
+                onlineUserList:data.userList,
+            })
+        })
+        // console.log("this.state.onlineUserList:"+this.state.onlineUserList)
     }
     componentDidMount() {
         var _this = this;
@@ -77,10 +71,10 @@ export default class Chat extends React.Component {
                     userAvatar:JSON.parse(xmlhttp.responseText).userAvatar
 
                 },()=> {
-                    console.log("this.state.onlineUser:"+ _this.state.onlineUser)
-                    console.log("this.state.onlineUser:"+ _this.state.userAvatar)
+                    // console.log("this.state.onlineUser:"+ _this.state.onlineUser)
+                    // console.log("this.state.onlineUser:"+ _this.state.userAvatar)
                     })
-                console.log(xmlhttp.responseText);
+                // console.log(xmlhttp.responseText);
             }
         }
         // xmlhttp.open("GET","http://127.0.0.1:3000/geCookie",true);
@@ -101,7 +95,7 @@ export default class Chat extends React.Component {
             <div id="chatBox">
                 <div id='userInfoBox'>
                     <UserInfo userName = {this.state.onlineUser} userAvatar={this.state.userAvatar}/>
-                    <UserList />
+                    <UserList onlineUserList={this.state.onlineUserList}/>
                 </div>
                 <div id='informationBox'>
                     <DisplayBox userName = {this.state.onlineUser} message={this.state.initialData} />

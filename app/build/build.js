@@ -16299,6 +16299,10 @@ var _displayBox = __webpack_require__(136);
 
 var _displayBox2 = _interopRequireDefault(_displayBox);
 
+var _userList = __webpack_require__(265);
+
+var _userList2 = _interopRequireDefault(_userList);
+
 var _reactRouterDom = __webpack_require__(19);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -16326,37 +16330,6 @@ function UserInfo(props) {
         _react2.default.createElement('img', { className: 'userAvatar', src: props.userAvatar, alt: '\u6211\u662F\u5934\u50CF' })
     );
 }
-function UserList(props) {
-    return _react2.default.createElement(
-        'div',
-        { className: 'userListBox' },
-        _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u684621', className: 'search' }),
-        _react2.default.createElement(
-            'div',
-            { className: 'onlineUser' },
-            _react2.default.createElement('img', { src: '../img/1.jpeg' }),
-            '\xA0\xA0\u6211\u662F\u5C0F\u9EC4'
-        ),
-        _react2.default.createElement(
-            'div',
-            { className: 'onlineUser' },
-            _react2.default.createElement('img', { src: '../img/3.jpeg' }),
-            '\xA0\xA0\u6211\u662F\u5C0F\u738B'
-        ),
-        _react2.default.createElement(
-            'div',
-            { className: 'onlineUser' },
-            _react2.default.createElement('img', { src: '../img/4.jpg' }),
-            '\xA0\xA0\u6211\u662F\u5C0F\u9648'
-        ),
-        _react2.default.createElement(
-            'div',
-            { className: 'onlineUser' },
-            _react2.default.createElement('img', { src: '../img/5.jpg' }),
-            '\xA0\xA0\u6211\u662F\u5C0F\u8D75'
-        )
-    );
-}
 
 var Chat = function (_React$Component) {
     _inherits(Chat, _React$Component);
@@ -16371,18 +16344,26 @@ var Chat = function (_React$Component) {
             userAvatar: '',
             myselfMessage: '',
             myselfTime: '',
-            initialData: []
+            initialData: [],
+            onlineUserList: {}
         };
         _this2.props.socket.on('initialMessage', function (data) {
             _this2.setState({
                 initialData: data.initialData
             });
-            console.log(data.initialData);
+            // console.log(data.initialData)
             // console.log("data.length"+(data.initialData).length)
             // // for (var i = 0;i<JSON.stringify(data.initialData).length;i++){
             // //     console.log(JSON.stringify(data.initialData)[i]);
             // // }
         });
+
+        _this2.props.socket.on('loginUserList', function (data) {
+            _this2.setState({
+                onlineUserList: data.userList
+            });
+        });
+        // console.log("this.state.onlineUserList:"+this.state.onlineUserList)
         return _this2;
     }
 
@@ -16408,10 +16389,10 @@ var Chat = function (_React$Component) {
                         userAvatar: JSON.parse(xmlhttp.responseText).userAvatar
 
                     }, function () {
-                        console.log("this.state.onlineUser:" + _this.state.onlineUser);
-                        console.log("this.state.onlineUser:" + _this.state.userAvatar);
+                        // console.log("this.state.onlineUser:"+ _this.state.onlineUser)
+                        // console.log("this.state.onlineUser:"+ _this.state.userAvatar)
                     });
-                    console.log(xmlhttp.responseText);
+                    // console.log(xmlhttp.responseText);
                 }
             };
             // xmlhttp.open("GET","http://127.0.0.1:3000/geCookie",true);
@@ -16438,7 +16419,7 @@ var Chat = function (_React$Component) {
                     'div',
                     { id: 'userInfoBox' },
                     _react2.default.createElement(UserInfo, { userName: this.state.onlineUser, userAvatar: this.state.userAvatar }),
-                    _react2.default.createElement(UserList, null)
+                    _react2.default.createElement(_userList2.default, { onlineUserList: this.state.onlineUserList })
                 ),
                 _react2.default.createElement(
                     'div',
@@ -34519,6 +34500,111 @@ module.exports = function(module) {
 /***/ (function(module, exports) {
 
 /* (ignored) */
+
+/***/ }),
+/* 265 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(19);
+
+var _socket = __webpack_require__(27);
+
+var _socket2 = _interopRequireDefault(_socket);
+
+var _rightDisplay = __webpack_require__(139);
+
+var _rightDisplay2 = _interopRequireDefault(_rightDisplay);
+
+var _leftDisplay = __webpack_require__(138);
+
+var _leftDisplay2 = _interopRequireDefault(_leftDisplay);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function UserDisplay(props) {
+    return _react2.default.createElement(
+        'div',
+        { className: 'userListBox' },
+        _react2.default.createElement(
+            'img',
+            { src: '../img/1.jpeg' },
+            '\xA0\xA0',
+            props.userName
+        )
+    );
+}
+
+var UserList = function (_Component) {
+    _inherits(UserList, _Component);
+
+    function UserList(props) {
+        _classCallCheck(this, UserList);
+
+        var _this = _possibleConstructorReturn(this, (UserList.__proto__ || Object.getPrototypeOf(UserList)).call(this, props));
+
+        console.log("this.props.onlineUserList.length:" + props.onlineUserList.toString());
+        // var test = {"gaoya":{"userName":"gaoya"},"大黄":{"userName":"大黄"}}
+        for (var item in _this.props.onlineUserList) {
+            console.log("12ewfhqwnfoq");
+            console.log("1111" + item + " : " + props.onlineUserList[item].userName);
+        }
+
+        console.log("122の3this.props.onlineUserList.length:" + Object.keys(props.onlineUserList));
+
+        return _this;
+    }
+
+    _createClass(UserList, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'userListBox' },
+                _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u684621', className: 'search' })
+            );
+        }
+    }]);
+
+    return UserList;
+}(_react.Component);
+// function UserList(props) {
+//     return(
+//         <div className='userListBox'>
+//             <input type='text' placeholder="搜索框21" className='search'/>
+//             <div className='onlineUser'>
+//                 <img src='../img/1.jpeg'/>&nbsp;&nbsp;我是小黄</div>
+//             <div className='onlineUser'>
+//                 <img src='../img/3.jpeg'/>&nbsp;&nbsp;我是小王</div>
+//             <div className='onlineUser'>
+//                 <img src='../img/4.jpg'/>&nbsp;&nbsp;我是小陈</div>
+//             <div className='onlineUser'>
+//                 <img src='../img/5.jpg'/>&nbsp;&nbsp;我是小赵</div>
+//         </div>
+//     )
+//
+// }
+
+
+exports.default = UserList;
 
 /***/ })
 /******/ ]);

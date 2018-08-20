@@ -37,7 +37,7 @@ router.get('/11222', function(req, res) {
 
 
 // 在线用户信息
-const onlineUsers = [];
+const onlineUsersList = [];
 
 // const onlineUsersSocket ={}
 
@@ -52,11 +52,12 @@ io.on('connection', function(socket) {
         	// 	// 	socket.name = user.userName;
         	// 	// } else {
         	// 	// 	socket.emit('logstate', 'same')
-        	// 	// }】
+        	// 	// }
 
 		// if(onlineUsersSocket[user.userName]===undefined){
          //    onlineUsersSocket[user.userName] = socket;
 		// }
+        // console.log("onlineUsersSocket"+JSON.stringify(onlineUsersSocket));
         // vain为用户名密码为空，success为成功，error为用户名密码错误
         const loginInfo = JSON.parse(fs.readFileSync('./config/userInfo.json','utf-8'));
         //登录时的聊天数据值
@@ -67,7 +68,34 @@ io.on('connection', function(socket) {
 				message:'账号或者密码为空!'
 			});
 		}else if(loginInfo[user.userName] != undefined && loginInfo[user.userName].password == user.userPassword){
+			//如果登录成功，将该用户放到onlineUsersList中，用于显示用户列表
+            const onlineUserList = JSON.parse(fs.readFileSync('./config/onlineList.json','utf-8'));
+            if(!onlineUserList[user.userName]){
+                onlineUserList[user.userName] ={
+					"userName":user.userName,
+				}
+			}
+			// for (let item in onlineUserList ){
+            	// console.log("1111"+item+" : "+onlineUserList[item].userName);
+			// }
 
+			//将在线用户写入onlineList.json文件中
+            fs.writeFileSync('./config/onlineList.json',new Buffer(JSON.stringify(onlineUserList)))
+
+            // if (onlineUsersList.indexOf(user.userName) === -1) {
+            //     onlineUsersList.push(user.userName);
+            // }
+            //向前端发送所有在线用户信息，并显示
+            socket.emit('loginUserList',{
+            	msg:'所有在线用户信息',
+				userList:onlineUserList
+			})
+
+            // console.log(onlineUsersList+"onlineUsersList");
+            // console.log("onlineUsersList"+onlineUsersList.length);
+
+
+            //读取message.json的值
             const messageInfo = JSON.parse(fs.readFileSync('./config/message.json','utf-8'));
 
             socket.emit('loginState', {
@@ -79,7 +107,7 @@ io.on('connection', function(socket) {
             //初始状态，用户以前的聊天记录
             const initialMessage = JSON.parse(fs.readFileSync('./config/message.json','utf-8'));
 
-            console.log('send init')
+            // console.log('send init')
             socket.emit('initialMessage',{
                 initialData:initialMessage[user.userName],
 			})
@@ -89,6 +117,8 @@ io.on('connection', function(socket) {
 				message:'账号或者密码不正确!',
 			});
         }
+
+
 
 	});
 	socket.on('msg', function(msg) {

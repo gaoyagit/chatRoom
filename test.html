@@ -74,5 +74,11 @@
     }
 
     console.log((new Date()).toLocaleString());
+
+    var test = {"gaoya":{"userName":"gaoya"},"大黄":{"userName":"大黄"}}
+    for(let item in test){
+        console.log(item+" : "+ test[item].userName);
+    }
+    // console.log(Object.keys(test))
 </script>
 </html>
