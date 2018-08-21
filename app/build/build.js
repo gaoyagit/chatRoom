@@ -34534,6 +34534,10 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _single = __webpack_require__(266);
+
+var _single2 = _interopRequireDefault(_single);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -34542,18 +34546,32 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function SingleUser(props) {
-    return _react2.default.createElement(
-        'div',
-        { className: 'onlineUser' },
-        _react2.default.createElement(
-            'img',
-            { src: '../img/1.jpeg' },
-            '\xA0\xA0',
-            props.userName
-        )
-    );
-}
+// function SingleUser(props) {
+//
+//     return (
+//         <div className='onlineUser' onClick={this.handleToUser.bind(this)}>
+//             <img src='../img/1.jpeg'>&nbsp;&nbsp;{props.userName}</img>
+//         </div>
+//     )
+// }
+// export default class SingleUser extends Component{
+//     constructor(props){
+//         super(props);
+//     }
+//
+//     handleToUser(){
+//         alert('点我了!')
+//     }
+//
+//     render(){
+//         return(
+//             <div className='onlineUser' onClick={this.handleToUser.bind(this)}>
+//                 <img src='../img/1.jpeg'>&nbsp;&nbsp;{this.props.userName}</img>
+//             </div>
+//         )
+//     }
+// }
+
 
 var UserList = function (_Component) {
     _inherits(UserList, _Component);
@@ -34562,7 +34580,13 @@ var UserList = function (_Component) {
         _classCallCheck(this, UserList);
 
         return _possibleConstructorReturn(this, (UserList.__proto__ || Object.getPrototypeOf(UserList)).call(this, props));
+
+        // this.handleToUser= this.handleToUser.bind(this);
     }
+
+    // handleToUser(){
+    //     alert('点我了!')
+    // }
 
     _createClass(UserList, [{
         key: 'render',
@@ -34574,9 +34598,9 @@ var UserList = function (_Component) {
                 { className: 'userListBox' },
                 _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u684621', className: 'search' }),
                 Object.keys(this.props.onlineUserList).map(function (key) {
-                    // console.log("111"+this.props.onlineUserList[key].userName);
-                    return _react2.default.createElement(SingleUser, { userName: _this2.props.onlineUserList[key].userName });
-                    // {this.props.onlineUserList[key].userName}
+                    return _react2.default.createElement(_single2.default, {
+                        userName: _this2.props.onlineUserList[key].userName
+                    });
                 })
             );
         }
@@ -34584,25 +34608,79 @@ var UserList = function (_Component) {
 
     return UserList;
 }(_react.Component);
-// function UserList(props) {
-//     return(
-//         <div className='userListBox'>
-//             <input type='text' placeholder="搜索框21" className='search'/>
-//             <div className='onlineUser'>
-//                 <img src='../img/1.jpeg'/>&nbsp;&nbsp;我是小黄</div>
-//             <div className='onlineUser'>
-//                 <img src='../img/3.jpeg'/>&nbsp;&nbsp;我是小王</div>
-//             <div className='onlineUser'>
-//                 <img src='../img/4.jpg'/>&nbsp;&nbsp;我是小陈</div>
-//             <div className='onlineUser'>
-//                 <img src='../img/5.jpg'/>&nbsp;&nbsp;我是小赵</div>
-//         </div>
-//     )
-//
-// }
-
 
 exports.default = UserList;
+
+/***/ }),
+/* 266 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SingleUser = function (_Component) {
+    _inherits(SingleUser, _Component);
+
+    function SingleUser(props) {
+        _classCallCheck(this, SingleUser);
+
+        var _this = _possibleConstructorReturn(this, (SingleUser.__proto__ || Object.getPrototypeOf(SingleUser)).call(this, props));
+
+        _this.state = { checked: false };
+        return _this;
+    }
+
+    _createClass(SingleUser, [{
+        key: 'handleToUser',
+        value: function handleToUser(e) {
+            this.setState({
+                checked: !this.state.checked
+            });
+            // this.style.backgroundColor = 'red';
+            alert(this.props.userName);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var rowStyle = {
+                backgroundColor: this.state.checked ? 'blue' : 'red'
+            };
+            console.log(rowStyle);
+            return _react2.default.createElement(
+                'div',
+                { className: 'onlineUser', onClick: this.handleToUser.bind(this), style: rowStyle },
+                _react2.default.createElement(
+                    'img',
+                    { src: '../img/1.jpeg' },
+                    '\xA0\xA0',
+                    this.props.userName
+                )
+            );
+        }
+    }]);
+
+    return SingleUser;
+}(_react.Component);
+
+exports.default = SingleUser;
 
 /***/ })
 /******/ ]);
