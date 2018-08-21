@@ -94,9 +94,16 @@ io.on('connection', function(socket) {
             const receiveMessage = JSON.parse(fs.readFileSync('./config/message.json','utf-8'));
 
             // console.log('send init')
-            socket.emit('receiveMessage',{
-                receiveData:receiveMessage[user.userName],
-			})
+			if(!receiveMessage[user.userName]){
+                socket.emit('receiveMessage',{
+                    receiveData:[],
+                })
+			}else {
+                socket.emit('receiveMessage',{
+                    receiveData:receiveMessage[user.userName],
+                })
+			}
+
 
             socket.emit('loginUserList',{
                 msg:'所有在线用户信息',

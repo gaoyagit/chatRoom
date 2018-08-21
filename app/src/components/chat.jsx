@@ -101,21 +101,13 @@ export default class Chat extends React.Component {
     }
 
     //点击用户列表中的一个用户，用来找toUser，以及聊天记录
-    handleDisplay() {
-
-    }
 
     render() {
         return (
             <div id="chatBox">
                 <div id='userInfoBox'>
                     <UserInfo userName={this.state.onlineUser} userAvatar={this.state.userAvatar}/>
-                    <UserList
-                        onlineUserList={this.state.onlineUserList}
-                        onClick={() => {
-                            this.handleDisplay(onlineUserList)
-                        }}
-                    />
+                    <UserList onlineUserList={this.state.onlineUserList}/>
                 </div>
                 <div id='informationBox'>
                     <DisplayBox userName={this.state.onlineUser} message={this.state.receiveData}/>

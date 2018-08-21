@@ -16421,9 +16421,6 @@ var Chat = function (_React$Component) {
         //点击用户列表中的一个用户，用来找toUser，以及聊天记录
 
     }, {
-        key: 'handleDisplay',
-        value: function handleDisplay() {}
-    }, {
         key: 'render',
         value: function render() {
             var _this4 = this;
@@ -16435,12 +16432,7 @@ var Chat = function (_React$Component) {
                     'div',
                     { id: 'userInfoBox' },
                     _react2.default.createElement(UserInfo, { userName: this.state.onlineUser, userAvatar: this.state.userAvatar }),
-                    _react2.default.createElement(_userList2.default, {
-                        onlineUserList: this.state.onlineUserList,
-                        onClick: function onClick() {
-                            _this4.handleDisplay(onlineUserList);
-                        }
-                    })
+                    _react2.default.createElement(_userList2.default, { onlineUserList: this.state.onlineUserList })
                 ),
                 _react2.default.createElement(
                     'div',
