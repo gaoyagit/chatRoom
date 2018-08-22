@@ -26,12 +26,21 @@ export default class Chat extends React.Component {
         this.state = {
             onlineUser: cookieFunction.getCookie('userName'),
             userAvatar: '',
-            myselfMessage: '',
-            myselfTime: '',
             receiveData: [],
             onlineUserList: {},
-            toUser: {},//当前用户和谁在聊天，显示聊天记录
+            toUser: '',//当前用户和谁在聊天，显示聊天记录
         };
+
+
+        this.props.socket.on('loginUserList', (data) => {
+            this.setState({
+                onlineUserList: data.userList,
+                toUser: data.userList[Object.keys(data.userList)[0]].userName,
+            })
+            // console.log("data.msg"+data.userList);
+            // console.log("data.msg"+data.userList[Object.keys(data.userList)[0]].userName);
+        })
+
         this.props.socket.on('receiveMessage', (data) => {
             this.setState({
                     receiveData: data.receiveData,
@@ -39,21 +48,8 @@ export default class Chat extends React.Component {
             )
 
         })
-
-        this.props.socket.on('loginUserList', (data) => {
-            this.setState({
-                onlineUserList: data.userList,
-                toUser: data.userList[Object.keys(data.userList)[0]],
-            })
-            // console.log("data.msg"+data.userList[Object.keys(data.userList)[0]]);
-        })
     }
 
-    //状态值改变的时候渲染
-    componentWillUpdate() {
-
-
-    }
 
     componentDidMount() {
         var _this = this;
@@ -101,17 +97,33 @@ export default class Chat extends React.Component {
     }
 
     //点击用户列表中的一个用户，用来找toUser，以及聊天记录
+    toUserChange(toUser){
+        // console.log("toUser"+toUser);
+        this.setState({
+            toUser:toUser
+        })
+    }
 
     render() {
         return (
             <div id="chatBox">
                 <div id='userInfoBox'>
-                    <UserInfo userName={this.state.onlineUser} userAvatar={this.state.userAvatar}/>
-                    <UserList onlineUserList={this.state.onlineUserList}/>
+                    <UserInfo
+                        userName={this.state.onlineUser}
+                        userAvatar={this.state.userAvatar}/>
+                    <UserList
+                        onlineUserList={this.state.onlineUserList}
+                        toUserChange = {this.toUserChange.bind(this)}/>
                 </div>
                 <div id='informationBox'>
-                    <DisplayBox userName={this.state.onlineUser} message={this.state.receiveData}/>
-                    <InputBox userName={this.state.onlineUser} socket={this.props.socket} onClickChange={(message) => {
+                    <DisplayBox
+                        userName={this.state.onlineUser}
+                        message={this.state.receiveData}
+                        toUser={this.state.toUser}/>
+                    <InputBox
+                        userName={this.state.onlineUser}
+                        socket={this.props.socket}
+                        onClickChange={(message) => {
                         this.state.receiveData.push(message)
                         this.setState({
                             receiveData: this.state.receiveData

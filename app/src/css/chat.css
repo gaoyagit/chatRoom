@@ -47,9 +47,9 @@ img {
     border-bottom: 1px solid gray;
 }
 
-.onlineUser:hover {
-    background-color: #333333;
-}
+/*.onlineUser:hover {*/
+    /*background-color: #333333;*/
+/*}*/
 
 #informationBox {
     /*width: 70%;*/
@@ -87,4 +87,8 @@ img {
     bottom: 10px;
     right: 10px;
     z-index: 1;
+}
+
+.checked{
+    background-color: #2dabf9;
 }

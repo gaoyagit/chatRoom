@@ -8,7 +8,7 @@ export default class UserList extends Component {
             checkedList[this.props.onlineUserList[key].userName]=false;
         })
         this.state={
-            checkedList:checkedList
+            checkedList:checkedList,
         }
     }
 
@@ -20,6 +20,7 @@ export default class UserList extends Component {
         this.setState({
             checkedList:this.state.checkedList,
         })
+        this.props.toUserChange(userName);
     }
 
     render() {
@@ -32,7 +33,7 @@ export default class UserList extends Component {
 
                         const userName= this.props.onlineUserList[key].userName;
                         const rowStyle = {
-                            backgroundColor: this.state.checkedList[userName] ? 'blue' : 'red'
+                            backgroundColor: this.state.checkedList[userName] ? '#333333' : '#222211'
                         };
 
                         return (
