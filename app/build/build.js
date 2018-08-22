@@ -16438,7 +16438,8 @@ var Chat = function (_React$Component) {
                         userAvatar: this.state.userAvatar }),
                     _react2.default.createElement(_userList2.default, {
                         onlineUserList: this.state.onlineUserList,
-                        toUserChange: this.toUserChange.bind(this) })
+                        toUserChange: this.toUserChange.bind(this),
+                        onlineUser: this.state.onlineUser })
                 ),
                 _react2.default.createElement(
                     'div',
@@ -16449,6 +16450,7 @@ var Chat = function (_React$Component) {
                         toUser: this.state.toUser }),
                     _react2.default.createElement(_inputBox2.default, {
                         userName: this.state.onlineUser,
+                        toUser: this.state.toUser,
                         socket: this.props.socket,
                         onClickChange: function onClickChange(message) {
                             _this4.state.receiveData.push(message);
@@ -16953,7 +16955,7 @@ var InputBox = function (_Component) {
         _this.state = {
             message: '',
             fromUser: props.userName,
-            toUser: '大黄',
+            toUser: props.toUser,
             time: ''
             // (new Date()).toLocaleString()
         };
@@ -16975,13 +16977,13 @@ var InputBox = function (_Component) {
                 message: this.state.message,
                 time: this.state.time,
                 fromUser: this.props.userName,
-                toUser: '大黄'
+                toUser: this.props.toUser
             });
             this.props.socket.emit('sendMessage', {
                 message: this.state.message,
                 time: this.state.time,
                 fromUser: this.props.userName,
-                toUser: '大黄'
+                toUser: this.props.toUser
             });
         }
     }, {
@@ -34563,9 +34565,14 @@ var UserList = function (_Component) {
         var _this = _possibleConstructorReturn(this, (UserList.__proto__ || Object.getPrototypeOf(UserList)).call(this, props));
 
         var checkedList = {};
-        Object.keys(_this.props.onlineUserList).map(function (key) {
+
+        Object.keys(_this.props.onlineUserList).filter(function (key) {
+            return key != _this.props.onlineUser;
+        }).map(function (key) {
+            console.log("key我方" + key);
             checkedList[_this.props.onlineUserList[key].userName] = false;
         });
+
         _this.state = {
             checkedList: checkedList
         };
@@ -34573,7 +34580,15 @@ var UserList = function (_Component) {
     }
 
     _createClass(UserList, [{
-        key: 'handleClick',
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            console.log("this.props.onlineUserList" + this.props.onlineUserList);
+            console.log("this.props.onlineUser" + this.props.onlineUser);
+
+            console.log(Object.keys(this.props.onlineUserList).length + "  " + "checkedList");
+        }
+    }, {
+        key: "handleClick",
         value: function handleClick(userName) {
             var _this2 = this;
 
@@ -34587,15 +34602,17 @@ var UserList = function (_Component) {
             this.props.toUserChange(userName);
         }
     }, {
-        key: 'render',
+        key: "render",
         value: function render() {
             var _this3 = this;
 
             return _react2.default.createElement(
-                'div',
-                { className: 'userListBox' },
-                _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u684621', className: 'search' }),
-                Object.keys(this.props.onlineUserList).map(function (key) {
+                "div",
+                { className: "userListBox" },
+                _react2.default.createElement("input", { type: "text", placeholder: "\u641C\u7D22\u684621", className: "search" }),
+                Object.keys(this.props.onlineUserList).filter(function (key) {
+                    return key != _this3.props.onlineUser;
+                }).map(function (key) {
 
                     var userName = _this3.props.onlineUserList[key].userName;
                     var rowStyle = {
@@ -34603,12 +34620,13 @@ var UserList = function (_Component) {
                     };
 
                     return _react2.default.createElement(
-                        'div',
-                        { className: 'onlineUser', onClick: _this3.handleClick.bind(_this3, userName), style: rowStyle },
+                        "div",
+                        { className: "onlineUser", onClick: _this3.handleClick.bind(_this3, userName),
+                            style: rowStyle },
                         _react2.default.createElement(
-                            'img',
-                            { src: '../img/1.jpeg' },
-                            '\xA0\xA0',
+                            "img",
+                            { src: "../img/1.jpeg" },
+                            "\xA0\xA0",
                             userName
                         )
                     );

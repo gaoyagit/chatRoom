@@ -96,7 +96,7 @@ io.on('connection', function(socket) {
             // console.log('send init')
 			if(!receiveMessage[user.userName]){
                 socket.emit('receiveMessage',{
-                    receiveData:[],
+                    receiveData:receiveMessage[user.userName],
                 })
 			}else {
                 socket.emit('receiveMessage',{

@@ -9,7 +9,7 @@ export default class InputBox extends Component {
         this.state = {
             message: '',
             fromUser: props.userName,
-            toUser: '大黄',
+            toUser: props.toUser,
             time: '',
             // (new Date()).toLocaleString()
         }
@@ -28,13 +28,13 @@ export default class InputBox extends Component {
             message: this.state.message,
             time: this.state.time,
             fromUser: this.props.userName,
-            toUser: '大黄',
+            toUser: this.props.toUser,
         })
         this.props.socket.emit('sendMessage', {
             message: this.state.message,
             time: this.state.time,
             fromUser: this.props.userName,
-            toUser: '大黄',
+            toUser: this.props.toUser,
         })
     }
 

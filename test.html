@@ -80,5 +80,14 @@
         console.log(item+" : "+ test[item].userName);
     }
     // console.log(Object.keys(test))
+
+    var array = [1,12,34,56,78];
+    var arr = array.filter((item)=>{
+        return item != 12;
+    }).map((item)=>{
+        console.log(item+": "+item)
+    })
+    console.log(arr);
+
 </script>
 </html>

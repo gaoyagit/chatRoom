@@ -113,7 +113,8 @@ export default class Chat extends React.Component {
                         userAvatar={this.state.userAvatar}/>
                     <UserList
                         onlineUserList={this.state.onlineUserList}
-                        toUserChange = {this.toUserChange.bind(this)}/>
+                        toUserChange = {this.toUserChange.bind(this)}
+                        onlineUser={this.state.onlineUser}/>
                 </div>
                 <div id='informationBox'>
                     <DisplayBox
@@ -122,6 +123,7 @@ export default class Chat extends React.Component {
                         toUser={this.state.toUser}/>
                     <InputBox
                         userName={this.state.onlineUser}
+                        toUser = {this.state.toUser}
                         socket={this.props.socket}
                         onClickChange={(message) => {
                         this.state.receiveData.push(message)
