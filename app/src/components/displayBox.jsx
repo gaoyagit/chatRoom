@@ -8,64 +8,105 @@ import LeftDisplay from './leftDisplay'
 export default class DisplayBox extends Component {
     constructor(props) {
         super(props);
-
-        // this.props.socket.on('sendToMyself',(data)=> {
-        //     // console.log(data.message);
-        //     // for(var i =0;i<data.message.length;i++){
-        //     //     console.log("第"+i+"条数据："+data.message[i].message+"\n")
-        //     // }
-        //     this.setState({
-        //         message:data.message,
-        //         // fromUser:data[0].fromUser,
-        //         // toUser:data[0].toUser,
-        //         // time:data.time,
-        //     })
-        // })
-
     }
 
-    componentDidMount() {
-        //接收消息
-        // socket.on('receiveMessage',function (info) {
-        //     this.setState({
-        //         message:info.message,
-        //         fromUser:info.fromUser,
-        //         toUser:info.toUser,
-        //         time:info.time,
-        //
-        //     })
-        // })
-
-        // this.props.socket.on('sendToMyself',function (data) {
-        //
-        // })
-    }
-
+    //开始进入页面中，没有toUser，显示“我是显示框”，点击在线用户，显示当前用户与选中的在线用户的聊天记录，若没有信息，显示“请开始与当前选中用户聊天吧”，若有以往聊天记录，显示以往聊天记录
     render() {
-        if (this.props.message) {
-            return (
-                <div className='displayBox'>
-                    {
-                        this.props.message.map((item, index) => {
-                            // console.log('ja',this.props.userName)
-                            if (item.fromUser == this.props.userName) {
-                                return <RightDisplay message={item.message}/>
-                            } else {
-                                return <LeftDisplay message={item.message}/>
-                            }
-                        })
-                    }
-
-                    {/*<LeftDisplay message={this.state.message}/>*/}
-                </div>
-            )
-        } else {
+        if (!this.props.toUser) {
             return (
                 <div className='displayBox'>
                     我是显示框
                 </div>
             )
+        } else {
+            const chatRecord = [];//定义当前聊天的两个用户的聊天信息
+
+            if (this.props.message[this.props.userName]){
+                //当前用户与选中用户的聊天信息
+                this.props.message[this.props.userName].map((item, index) => {
+                    if (item.toUser == this.props.toUser) {
+                        chatRecord.push(item);
+                    }
+                })
+            }
+
+
+            if (this.props.message[this.props.toUser]){
+                //选中用户与当前用户的聊天信息
+                this.props.message[this.props.toUser].map((item, index) => {
+                    if (item.fromUser == this.props.userName) {
+                        chatRecord.push(item);
+                    }
+                })
+            }
+
+            console.log("chatRecord.length"+chatRecord.length);
+            // console.log(JSON.stringify(this.props.message))
+            if (chatRecord.length != 0) {
+                return (
+                    <div className='displayBox'>
+                        好开心啊！
+                    </div>
+                )
+            } else {
+                return (
+                    <div className='displayBox'>
+                        请与{this.props.toUser}开始聊天吧
+                    </div>
+                )
+            }
 
         }
+        // if (this.props.message) {
+        //     console.log("fafhfjfj:"+JSON.stringify(this.props.message['gaoya']));
+        //     console.log("ccsanb:"+this.props.userName);
+        //     console.log("cewere:"+this.props.toUser)
+        //
+        //     const chatRecord = [];
+        //     this.props.message[this.props.userName].map((item,index)=>{
+        //         if(item.toUser == this.props.toUser){
+        //             chatRecord.push(item);
+        //         }
+        //     })
+        //
+        //     this.props.message[this.props.toUser].map((item,index)=>{
+        //         if(item.fromUser == this.props.userName){
+        //             chatRecord.push(item);
+        //         }
+        //     })
+        //     if (!chatRecord){
+        //         return (
+        //             <div className='displayBox'>
+        //                 我是占位符
+        //                 {/*{*/}
+        //                 {/*chatRecord.map((item, index) => {*/}
+        //                 {/*if (item.fromUser == this.props.userName) {*/}
+        //                 {/*return <RightDisplay message={item.message}/>*/}
+        //                 {/*} else {*/}
+        //                 {/*return <LeftDisplay message={item.message}/>*/}
+        //                 {/*}*/}
+        //                 {/*})*/}
+        //                 {/*}*/}
+        //
+        //             </div>
+        //         )
+        //     }else {
+        //         return (
+        //             <div className='displayBox'>
+        //                 我们可以聊天了
+        //             </div>
+        //         )
+        //     }
+        //     // chatRecord.push(this.props.message[this.props.userName]);
+        //     // chatRecord.push(this.props.message.)
+        //
+        // } else {
+        //     return (
+        //         <div className='displayBox'>
+        //             我是显示框
+        //         </div>
+        //     )
+        //
+        // }
     }
 }

@@ -44,20 +44,6 @@ const onlineUsersList = [];
 io.on('connection', function(socket) {
 	console.log(socket.id)
 	socket.on('login', function(user) {
-		// if (onlineUsers.indexOf(user.userName) === -1) {
-        	// 	// 	onlineUsers.push(user.userName);
-        	// 	// 	socket.emit('loginState', false);
-        	// 	// 	console.log('在线用户：' + onlineUsers);
-        	// 	// 	io.emit('loginUser', onlineUsers);
-        	// 	// 	socket.name = user.userName;
-        	// 	// } else {
-        	// 	// 	socket.emit('logstate', 'same')
-        	// 	// }
-
-		// if(onlineUsersSocket[user.userName]===undefined){
-         //    onlineUsersSocket[user.userName] = socket;
-		// }
-        // console.log("onlineUsersSocket"+JSON.stringify(onlineUsersSocket));
         // vain为用户名密码为空，success为成功，error为用户名密码错误
         const loginInfo = JSON.parse(fs.readFileSync('./config/userInfo.json','utf-8'));
         //登录时的聊天数据值
@@ -90,19 +76,11 @@ io.on('connection', function(socket) {
 
             });
 
-            //初始状态，用户以前的聊天记录
+            //返回所有的聊天记录
             const receiveMessage = JSON.parse(fs.readFileSync('./config/message.json','utf-8'));
-
-            // console.log('send init')
-			if(!receiveMessage[user.userName]){
-                socket.emit('receiveMessage',{
-                    receiveData:receiveMessage[user.userName],
-                })
-			}else {
-                socket.emit('receiveMessage',{
-                    receiveData:receiveMessage[user.userName],
-                })
-			}
+            socket.emit('receiveMessage',{
+                receiveData:receiveMessage
+            })
 
 
             socket.emit('loginUserList',{

@@ -16343,15 +16343,15 @@ var Chat = function (_React$Component) {
         _this2.state = {
             onlineUser: cookieFunction.getCookie('userName'),
             userAvatar: '',
-            receiveData: [],
+            receiveData: {},
             onlineUserList: {},
             toUser: '' //当前用户和谁在聊天，显示聊天记录
         };
 
+        //将当前touser设为userlist列表中的第一个用户
         _this2.props.socket.on('loginUserList', function (data) {
             _this2.setState({
-                onlineUserList: data.userList,
-                toUser: data.userList[Object.keys(data.userList)[0]].userName
+                onlineUserList: data.userList
             });
             // console.log("data.msg"+data.userList);
             // console.log("data.msg"+data.userList[Object.keys(data.userList)[0]].userName);
@@ -16361,6 +16361,7 @@ var Chat = function (_React$Component) {
             _this2.setState({
                 receiveData: data.receiveData
             });
+            // console.log("data"+data.receiveData['gaoya'][0].fromUser);
         });
         return _this2;
     }
@@ -16425,8 +16426,6 @@ var Chat = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
-
             return _react2.default.createElement(
                 'div',
                 { id: 'chatBox' },
@@ -16447,17 +16446,7 @@ var Chat = function (_React$Component) {
                     _react2.default.createElement(_displayBox2.default, {
                         userName: this.state.onlineUser,
                         message: this.state.receiveData,
-                        toUser: this.state.toUser }),
-                    _react2.default.createElement(_inputBox2.default, {
-                        userName: this.state.onlineUser,
-                        toUser: this.state.toUser,
-                        socket: this.props.socket,
-                        onClickChange: function onClickChange(message) {
-                            _this4.state.receiveData.push(message);
-                            _this4.setState({
-                                receiveData: _this4.state.receiveData
-                            });
-                        } })
+                        toUser: this.state.toUser })
                 )
             );
         }
@@ -16845,64 +16834,112 @@ var DisplayBox = function (_Component) {
         _classCallCheck(this, DisplayBox);
 
         return _possibleConstructorReturn(this, (DisplayBox.__proto__ || Object.getPrototypeOf(DisplayBox)).call(this, props));
-
-        // this.props.socket.on('sendToMyself',(data)=> {
-        //     // console.log(data.message);
-        //     // for(var i =0;i<data.message.length;i++){
-        //     //     console.log("第"+i+"条数据："+data.message[i].message+"\n")
-        //     // }
-        //     this.setState({
-        //         message:data.message,
-        //         // fromUser:data[0].fromUser,
-        //         // toUser:data[0].toUser,
-        //         // time:data.time,
-        //     })
-        // })
     }
 
-    _createClass(DisplayBox, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            //接收消息
-            // socket.on('receiveMessage',function (info) {
-            //     this.setState({
-            //         message:info.message,
-            //         fromUser:info.fromUser,
-            //         toUser:info.toUser,
-            //         time:info.time,
-            //
-            //     })
-            // })
+    //开始进入页面中，没有toUser，显示“我是显示框”，点击在线用户，显示当前用户与选中的在线用户的聊天记录，若没有信息，显示“请开始与当前选中用户聊天吧”，若有以往聊天记录，显示以往聊天记录
 
-            // this.props.socket.on('sendToMyself',function (data) {
-            //
-            // })
-        }
-    }, {
+
+    _createClass(DisplayBox, [{
         key: 'render',
         value: function render() {
             var _this2 = this;
 
-            if (this.props.message) {
-                return _react2.default.createElement(
-                    'div',
-                    { className: 'displayBox' },
-                    this.props.message.map(function (item, index) {
-                        // console.log('ja',this.props.userName)
-                        if (item.fromUser == _this2.props.userName) {
-                            return _react2.default.createElement(_rightDisplay2.default, { message: item.message });
-                        } else {
-                            return _react2.default.createElement(_leftDisplay2.default, { message: item.message });
-                        }
-                    })
-                );
-            } else {
+            if (!this.props.toUser) {
                 return _react2.default.createElement(
                     'div',
                     { className: 'displayBox' },
                     '\u6211\u662F\u663E\u793A\u6846'
                 );
+            } else {
+                var chatRecord = []; //定义当前聊天的两个用户的聊天信息
+
+                if (this.props.message[this.props.userName]) {
+                    //当前用户与选中用户的聊天信息
+                    this.props.message[this.props.userName].map(function (item, index) {
+                        if (item.toUser == _this2.props.toUser) {
+                            chatRecord.push(item);
+                        }
+                    });
+                }
+
+                if (this.props.message[this.props.toUser]) {
+                    //选中用户与当前用户的聊天信息
+                    this.props.message[this.props.toUser].map(function (item, index) {
+                        if (item.fromUser == _this2.props.userName) {
+                            chatRecord.push(item);
+                        }
+                    });
+                }
+
+                console.log("chatRecord.length" + chatRecord.length);
+                // console.log(JSON.stringify(this.props.message))
+                if (chatRecord.length != 0) {
+                    return _react2.default.createElement(
+                        'div',
+                        { className: 'displayBox' },
+                        '\u597D\u5F00\u5FC3\u554A\uFF01'
+                    );
+                } else {
+                    return _react2.default.createElement(
+                        'div',
+                        { className: 'displayBox' },
+                        '\u8BF7\u4E0E',
+                        this.props.toUser,
+                        '\u5F00\u59CB\u804A\u5929\u5427'
+                    );
+                }
             }
+            // if (this.props.message) {
+            //     console.log("fafhfjfj:"+JSON.stringify(this.props.message['gaoya']));
+            //     console.log("ccsanb:"+this.props.userName);
+            //     console.log("cewere:"+this.props.toUser)
+            //
+            //     const chatRecord = [];
+            //     this.props.message[this.props.userName].map((item,index)=>{
+            //         if(item.toUser == this.props.toUser){
+            //             chatRecord.push(item);
+            //         }
+            //     })
+            //
+            //     this.props.message[this.props.toUser].map((item,index)=>{
+            //         if(item.fromUser == this.props.userName){
+            //             chatRecord.push(item);
+            //         }
+            //     })
+            //     if (!chatRecord){
+            //         return (
+            //             <div className='displayBox'>
+            //                 我是占位符
+            //                 {/*{*/}
+            //                 {/*chatRecord.map((item, index) => {*/}
+            //                 {/*if (item.fromUser == this.props.userName) {*/}
+            //                 {/*return <RightDisplay message={item.message}/>*/}
+            //                 {/*} else {*/}
+            //                 {/*return <LeftDisplay message={item.message}/>*/}
+            //                 {/*}*/}
+            //                 {/*})*/}
+            //                 {/*}*/}
+            //
+            //             </div>
+            //         )
+            //     }else {
+            //         return (
+            //             <div className='displayBox'>
+            //                 我们可以聊天了
+            //             </div>
+            //         )
+            //     }
+            //     // chatRecord.push(this.props.message[this.props.userName]);
+            //     // chatRecord.push(this.props.message.)
+            //
+            // } else {
+            //     return (
+            //         <div className='displayBox'>
+            //             我是显示框
+            //         </div>
+            //     )
+            //
+            // }
         }
     }]);
 

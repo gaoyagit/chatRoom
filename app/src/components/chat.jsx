@@ -26,16 +26,15 @@ export default class Chat extends React.Component {
         this.state = {
             onlineUser: cookieFunction.getCookie('userName'),
             userAvatar: '',
-            receiveData: [],
+            receiveData: {},
             onlineUserList: {},
             toUser: '',//当前用户和谁在聊天，显示聊天记录
         };
 
-
+        //将当前touser设为userlist列表中的第一个用户
         this.props.socket.on('loginUserList', (data) => {
             this.setState({
                 onlineUserList: data.userList,
-                toUser: data.userList[Object.keys(data.userList)[0]].userName,
             })
             // console.log("data.msg"+data.userList);
             // console.log("data.msg"+data.userList[Object.keys(data.userList)[0]].userName);
@@ -46,7 +45,7 @@ export default class Chat extends React.Component {
                     receiveData: data.receiveData,
                 }
             )
-
+            // console.log("data"+data.receiveData['gaoya'][0].fromUser);
         })
     }
 
@@ -121,16 +120,16 @@ export default class Chat extends React.Component {
                         userName={this.state.onlineUser}
                         message={this.state.receiveData}
                         toUser={this.state.toUser}/>
-                    <InputBox
-                        userName={this.state.onlineUser}
-                        toUser = {this.state.toUser}
-                        socket={this.props.socket}
-                        onClickChange={(message) => {
-                        this.state.receiveData.push(message)
-                        this.setState({
-                            receiveData: this.state.receiveData
-                        })
-                    }}/>
+                    {/*<InputBox*/}
+                        {/*userName={this.state.onlineUser}*/}
+                        {/*toUser = {this.state.toUser}*/}
+                        {/*socket={this.props.socket}*/}
+                        {/*onClickChange={(message) => {*/}
+                        {/*this.state.receiveData.push(message)*/}
+                        {/*this.setState({*/}
+                            {/*receiveData: this.state.receiveData*/}
+                        {/*})*/}
+                    {/*}}/>*/}
                 </div>
             </div>
         );
