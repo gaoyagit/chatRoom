@@ -66,6 +66,10 @@ img {
     overflow: scroll;
     /*border-bottom: 1px solid gray;*/
 }
+/*隐藏滚动条*/
+.displayBox::-webkit-scrollbar {
+    display: none;
+}
 
 .inputBox {
     flex: 0 0 30%;

@@ -16853,12 +16853,19 @@ var DisplayBox = function (_Component) {
         _classCallCheck(this, DisplayBox);
 
         return _possibleConstructorReturn(this, (DisplayBox.__proto__ || Object.getPrototypeOf(DisplayBox)).call(this, props));
+        // this.onEndScrollHandle();
     }
 
-    //开始进入页面中，没有toUser，显示“我是显示框”，点击在线用户，显示当前用户与选中的在线用户的聊天记录，若没有信息，显示“请开始与当前选中用户聊天吧”，若有以往聊天记录，显示以往聊天记录
-
-
     _createClass(DisplayBox, [{
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate() {
+            var displayBox = document.getElementById('displayBox');
+            displayBox.scrollTop = displayBox.scrollHeight;
+        }
+
+        //开始进入页面中，没有toUser，显示“我是显示框”，点击在线用户，显示当前用户与选中的在线用户的聊天记录，若没有信息，显示“请开始与当前选中用户聊天吧”，若有以往聊天记录，显示以往聊天记录
+
+    }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
@@ -16866,7 +16873,7 @@ var DisplayBox = function (_Component) {
             if (!this.props.toUser) {
                 return _react2.default.createElement(
                     'div',
-                    { className: 'displayBox' },
+                    { className: 'displayBox', id: 'displayBox' },
                     '\u6211\u662F\u663E\u793A\u6846'
                 );
             } else {
@@ -16909,13 +16916,13 @@ var DisplayBox = function (_Component) {
                     });
                     return _react2.default.createElement(
                         'div',
-                        { className: 'displayBox' },
+                        { className: 'displayBox', id: 'displayBox' },
                         userMessage
                     );
                 } else {
                     return _react2.default.createElement(
                         'div',
-                        { className: 'displayBox' },
+                        { className: 'displayBox', id: 'displayBox' },
                         '\u8BF7\u4E0E',
                         this.props.toUser,
                         '\u5F00\u59CB\u804A\u5929\u5427'

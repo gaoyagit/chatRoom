@@ -8,13 +8,19 @@ import LeftDisplay from './leftDisplay'
 export default class DisplayBox extends Component {
     constructor(props) {
         super(props);
+        // this.onEndScrollHandle();
+    }
+
+    componentDidUpdate(){
+        let displayBox = document.getElementById('displayBox')
+        displayBox.scrollTop = displayBox.scrollHeight;
     }
 
     //开始进入页面中，没有toUser，显示“我是显示框”，点击在线用户，显示当前用户与选中的在线用户的聊天记录，若没有信息，显示“请开始与当前选中用户聊天吧”，若有以往聊天记录，显示以往聊天记录
     render() {
         if (!this.props.toUser) {
             return (
-                <div className='displayBox'>
+                <div className='displayBox' id='displayBox'>
                     我是显示框
                 </div>
             )
@@ -57,13 +63,13 @@ export default class DisplayBox extends Component {
                     }
                 })
                 return (
-                    <div className='displayBox'>
+                    <div className='displayBox' id='displayBox'>
                         {userMessage}
                     </div>
                 )
             } else {
                 return (
-                    <div className='displayBox'>
+                    <div className='displayBox' id='displayBox'>
                         请与{this.props.toUser}开始聊天吧
                     </div>
                 )
