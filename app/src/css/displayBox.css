@@ -11,3 +11,8 @@
     justify-content:flex-start;
     margin-bottom: 0.5rem;
 }
+
+.displayBox img{
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}

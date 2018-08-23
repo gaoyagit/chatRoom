@@ -50,9 +50,10 @@ export default class DisplayBox extends Component {
 
                 userMessage = chatRecord.map((item, index) => {
                     if (item.fromUser == this.props.userName && item.toUser == this.props.toUser) {
-                        return <RightDisplay message={item.message}/>
+                        return <RightDisplay message={item.message} fromUserAvatar ={this.props.userAvatar}/>
                     } else if (item.toUser == this.props.userName && item.fromUser == this.props.toUser){
-                        return <LeftDisplay message={item.message}/>
+                        console.log("this.props.toUserAvatar"+this.props.toUserAvatar)
+                        return <LeftDisplay message={item.message} toUserAvatar = {this.props.toUserAvatar}/>
                     }
                 })
                 return (

@@ -10,7 +10,7 @@ export default class LeftDisplay extends Component {
     render() {
         return (
             <div className='leftDisplayBox'>
-                <img src={this.props.avatar}/>
+                <img src={this.props.toUserAvatar}/>
                 <div className='message'>{this.props.message}</div>
             </div>
         )

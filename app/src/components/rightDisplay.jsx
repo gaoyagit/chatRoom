@@ -15,7 +15,7 @@ export default class RightDisplay extends Component {
         return (
             <div className='rightDisplayBox'>
                 <div className='message'>{this.props.message}</div>
-                <img src={this.props.avatar}/>
+                <img src={this.props.fromUserAvatar}/>
             </div>
         )
     }

@@ -11,16 +11,12 @@ export default class InputBox extends Component {
             fromUser: props.userName,
             toUser: props.toUser,
             time: '',
-            // (new Date()).toLocaleString()
+            inputText: '',
         }
 
-        this.props.socket.on('inputSuccess', function (data) {
-            alert(data.msg);
-        })
-
-        this.props.socket.on('inputVain', function (data) {
-            alert(data.msg);
-        })
+        // this.props.socket.on('inputSuccess', function (data) {
+        //     alert(data.msg);
+        // })
     }
 
     handleInput() {
@@ -36,6 +32,11 @@ export default class InputBox extends Component {
             fromUser: this.props.userName,
             toUser: this.props.toUser,
         })
+
+        this.setState({
+            inputText:''
+        })
+
     }
 
     render() {
@@ -45,11 +46,15 @@ export default class InputBox extends Component {
             onChange={(e) => {
                 this.setState({
                     message: e.target.value,
-                    time: (new Date()).toLocaleString()
+                    time: (new Date()).toLocaleString(),
+                    inputText: e.target.value
                 })
             }}
             className='inputDetails'
-            placeholder='我是输入框'>
+            // placeholder='我是输入框'
+            value={this.state.inputText}>
+
+
         </textarea>
                 <button
                     className='sendBtn'

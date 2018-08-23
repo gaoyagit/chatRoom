@@ -52,8 +52,6 @@ export default class LogIn extends React.Component {
                     type="password"
                     placeholder="密码"
                     onChange={(e) => {
-
-
                         this.setState({
                             userPassword: e.target.value
                         })
