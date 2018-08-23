@@ -42,12 +42,13 @@ io.on('connection', function (socket) {
         } else if (loginInfo[user.userName] != undefined && loginInfo[user.userName].password == user.userPassword) {
 
             socket.userName = user.userName;
+            console.log("socket.userName" + socket.userName);
             //如果登录成功，将该用户放到onlineUsersList中，用于显示用户列表
             const onlineUserList = JSON.parse(fs.readFileSync('./config/onlineList.json', 'utf-8'));
             if (!onlineUserList[user.userName]) {
                 onlineUserList[user.userName] = {
                     "userName": user.userName,
-                    "avatar":loginInfo[user.userName].avatar
+                    "avatar": loginInfo[user.userName].avatar
                 }
             }
 
@@ -69,7 +70,7 @@ io.on('connection', function (socket) {
             })
 
 
-            socket.emit('loginUserList', {
+            io.emit('loginUserList', {
                 msg: '所有在线用户信息',
                 userList: onlineUserList,
             })
@@ -88,18 +89,6 @@ io.on('connection', function (socket) {
         robot(msg.message);
         console.log(msg.userName + ':' + msg.message)
     })
-    socket.on('disconnect', function () {
-        // if (onlineUsers.indexOf(socket.name) + 1) {
-        // 	console.log('用户退出:' + socket.name)
-        // 	var i = onlineUsers.indexOf(socket.name)
-        // 	onlineUsers.splice(i, 1);
-        // 	socket.broadcast.emit('quit', socket.name);
-        // 	io.emit('loginUser', onlineUsers, 'quitinfo')
-        // }
-        // if(onlineUsersSocket[user.userName]!==undefined){
-        //    delete onlineUsersSocket[user.userName];
-        // }
-    });
     socket.on('register', function (registerData) {
         //读取文件数据库
         const registerInfo = JSON.parse(fs.readFileSync('./config/userInfo.json', 'utf-8'));
@@ -139,11 +128,22 @@ io.on('connection', function (socket) {
             })
             //写文件数据库
             fs.writeFileSync('./config/message.json', new Buffer(JSON.stringify(messageInfo)))
+
         }
     });
-
+    //关闭当前在线用户的按钮，将当前用户从onlineList.json文件里删除
     socket.on('disconnect', function () {
-        console.log(socket.id,socket.userName);
+        console.log(socket.id, socket.userName);
+        const onlineList = JSON.parse(fs.readFileSync('./config/onlineList.json', 'utf-8'));
+        if (onlineList[socket.userName]) {
+            delete onlineList[socket.userName]
+        }
+        fs.writeFileSync('./config/onlineList.json', new Buffer(JSON.stringify(onlineList)))
+        //当当前用户退出时，再重新广播一次所有在线用户信息
+        io.emit('loginUserList', {
+            msg: '所有在线用户信息',
+            userList: onlineList,
+        })
     });
 
 
