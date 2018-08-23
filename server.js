@@ -41,6 +41,7 @@ io.on('connection', function (socket) {
             });
         } else if (loginInfo[user.userName] != undefined && loginInfo[user.userName].password == user.userPassword) {
 
+            socket.userName = user.userName;
             //如果登录成功，将该用户放到onlineUsersList中，用于显示用户列表
             const onlineUserList = JSON.parse(fs.readFileSync('./config/onlineList.json', 'utf-8'));
             if (!onlineUserList[user.userName]) {
@@ -139,6 +140,10 @@ io.on('connection', function (socket) {
             //写文件数据库
             fs.writeFileSync('./config/message.json', new Buffer(JSON.stringify(messageInfo)))
         }
+    });
+
+    socket.on('disconnect', function () {
+        console.log(socket.id,socket.userName);
     });
 
 
