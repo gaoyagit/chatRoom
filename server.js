@@ -25,7 +25,7 @@ router.get('/geCookie', function (req, res) {
 // 在线用户信息
 const onlineUsersList = [];
 
-// const onlineUsersSocket ={}
+const onlineUsersSocket ={}//存放当前在线用户的socket
 
 io.on('connection', function (socket) {
     // console.log(socket.name)
@@ -40,9 +40,13 @@ io.on('connection', function (socket) {
                 message: '账号或者密码为空!'
             });
         } else if (loginInfo[user.userName] != undefined && loginInfo[user.userName].password == user.userPassword) {
-
+            //如果onlineUsersSocket对象中没有当前用户的socket值，将当前用户的socket放入onlineUsersSocket中
             socket.userName = user.userName;
-            console.log("socket.userName" + socket.userName);
+            if (!onlineUsersSocket[user.userName]){
+                onlineUsersSocket[user.userName]=socket;
+            }
+
+            // console.log("socket.userName" + socket.userName);
             //如果登录成功，将该用户放到onlineUsersList中，用于显示用户列表
             const onlineUserList = JSON.parse(fs.readFileSync('./config/onlineList.json', 'utf-8'));
             if (!onlineUserList[user.userName]) {
@@ -129,12 +133,29 @@ io.on('connection', function (socket) {
             //写文件数据库
             fs.writeFileSync('./config/message.json', new Buffer(JSON.stringify(messageInfo)))
 
+            //如果toUser在onlineUsersSocket中，将向toUser发送接收消息的命令
+            if (onlineUsersSocket[messageData.toUser]){
+                onlineUsersSocket[messageData.toUser].emit("receiveMessage",{
+                    receiveData: messageInfo
+                })
+            }
+
+
         }
     });
     //关闭当前在线用户的按钮，将当前用户从onlineList.json文件里删除
     socket.on('disconnect', function () {
         console.log(socket.id, socket.userName);
         const onlineList = JSON.parse(fs.readFileSync('./config/onlineList.json', 'utf-8'));
+
+        //将当前用户从onlineUsersSocket对象中删除
+        if(onlineUsersSocket[socket.userName]){
+            delete onlineUsersSocket[socket.userName];
+        }
+
+        console.log("onlineUsersSocket"+Object.keys(onlineUsersSocket).length)
+
+        //将当前用户从onlineList.json中删除
         if (onlineList[socket.userName]) {
             delete onlineList[socket.userName]
         }
