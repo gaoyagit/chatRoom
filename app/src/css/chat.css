@@ -15,6 +15,12 @@ img {
     width: 3rem;
     height: 3rem;
 }
+textarea{
+    overflow: scroll;
+}
+textarea::-webkit-scrollbar {
+    display: none;
+}
 
 #userInfoBox {
     background-color: #222211;
