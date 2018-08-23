@@ -10,7 +10,7 @@ export default class UserList extends Component {
                 return key != this.props.onlineUser
             })
             .map((key) => {
-                console.log("key我方"+key);
+                // console.log("key我方"+key);
                 checkedList[this.props.onlineUserList[key].userName] = false;
 
             })
@@ -60,7 +60,7 @@ export default class UserList extends Component {
                             return (
                                 <div className='onlineUser' onClick={this.handleClick.bind(this, userName)}
                                      style={rowStyle}>
-                                    <img src='../img/1.jpeg'>&nbsp;&nbsp;{userName}</img>
+                                    <img src={this.props.onlineUserList[userName].avatar}>&nbsp;&nbsp;{userName}</img>
                                 </div>
                             )
                         })

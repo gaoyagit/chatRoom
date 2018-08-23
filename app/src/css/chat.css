@@ -63,6 +63,7 @@ img {
 .displayBox {
     flex: 0 0 70%;
     background-color: gainsboro;
+    overflow: scroll;
     /*border-bottom: 1px solid gray;*/
 }
 
