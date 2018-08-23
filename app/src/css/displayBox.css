@@ -1,9 +1,13 @@
 .rightDisplayBox {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
 }
 
-.leftDisplay {
+.leftDisplayBox {
     display: flex;
     align-items: center;
+    justify-content:flex-start;
+    margin-bottom: 0.5rem;
 }

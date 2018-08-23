@@ -16426,6 +16426,8 @@ var Chat = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            var _this4 = this;
+
             return _react2.default.createElement(
                 'div',
                 { id: 'chatBox' },
@@ -16446,7 +16448,17 @@ var Chat = function (_React$Component) {
                     _react2.default.createElement(_displayBox2.default, {
                         userName: this.state.onlineUser,
                         message: this.state.receiveData,
-                        toUser: this.state.toUser })
+                        toUser: this.state.toUser }),
+                    _react2.default.createElement(_inputBox2.default, {
+                        userName: this.state.onlineUser,
+                        toUser: this.state.toUser,
+                        socket: this.props.socket,
+                        onClickChange: function onClickChange(message) {
+                            _this4.state.receiveData.push(message);
+                            _this4.setState({
+                                receiveData: _this4.state.receiveData
+                            });
+                        } })
                 )
             );
         }
@@ -16865,19 +16877,32 @@ var DisplayBox = function (_Component) {
                 if (this.props.message[this.props.toUser]) {
                     //选中用户与当前用户的聊天信息
                     this.props.message[this.props.toUser].map(function (item, index) {
-                        if (item.fromUser == _this2.props.userName) {
+                        if (item.toUser == _this2.props.userName) {
                             chatRecord.push(item);
                         }
                     });
                 }
 
-                console.log("chatRecord.length" + chatRecord.length);
+                chatRecord.sort(function (a, b) {
+                    return a.time < b.time ? -1 : 1;
+                });
+                // console.log("chatRecord.length" + chatRecord.length);
                 // console.log(JSON.stringify(this.props.message))
-                if (chatRecord.length != 0) {
+                //如果chatRecord的长度不为0，将当前用户与选中用户的聊天记录放到displayBox，当前用户与选中用户的聊天记录，放到右边；选中用户与当前用户的聊天记录，放到左边
+                if (chatRecord.length) {
+                    var userMessage = void 0;
+
+                    userMessage = chatRecord.map(function (item, index) {
+                        if (item.fromUser == _this2.props.userName && item.toUser == _this2.props.toUser) {
+                            return _react2.default.createElement(_rightDisplay2.default, { message: item.message });
+                        } else if (item.toUser == _this2.props.userName && item.fromUser == _this2.props.toUser) {
+                            return _react2.default.createElement(_leftDisplay2.default, { message: item.message });
+                        }
+                    });
                     return _react2.default.createElement(
                         'div',
                         { className: 'displayBox' },
-                        '\u597D\u5F00\u5FC3\u554A\uFF01'
+                        userMessage
                     );
                 } else {
                     return _react2.default.createElement(

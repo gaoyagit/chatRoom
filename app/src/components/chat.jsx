@@ -120,16 +120,16 @@ export default class Chat extends React.Component {
                         userName={this.state.onlineUser}
                         message={this.state.receiveData}
                         toUser={this.state.toUser}/>
-                    {/*<InputBox*/}
-                        {/*userName={this.state.onlineUser}*/}
-                        {/*toUser = {this.state.toUser}*/}
-                        {/*socket={this.props.socket}*/}
-                        {/*onClickChange={(message) => {*/}
-                        {/*this.state.receiveData.push(message)*/}
-                        {/*this.setState({*/}
-                            {/*receiveData: this.state.receiveData*/}
-                        {/*})*/}
-                    {/*}}/>*/}
+                    <InputBox
+                        userName={this.state.onlineUser}
+                        toUser = {this.state.toUser}
+                        socket={this.props.socket}
+                        onClickChange={(message) => {
+                        this.state.receiveData.push(message)
+                        this.setState({
+                            receiveData: this.state.receiveData
+                        })
+                    }}/>
                 </div>
             </div>
         );

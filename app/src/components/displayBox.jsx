@@ -21,7 +21,7 @@ export default class DisplayBox extends Component {
         } else {
             const chatRecord = [];//定义当前聊天的两个用户的聊天信息
 
-            if (this.props.message[this.props.userName]){
+            if (this.props.message[this.props.userName]) {
                 //当前用户与选中用户的聊天信息
                 this.props.message[this.props.userName].map((item, index) => {
                     if (item.toUser == this.props.toUser) {
@@ -30,22 +30,34 @@ export default class DisplayBox extends Component {
                 })
             }
 
-
-            if (this.props.message[this.props.toUser]){
+            if (this.props.message[this.props.toUser]) {
                 //选中用户与当前用户的聊天信息
                 this.props.message[this.props.toUser].map((item, index) => {
-                    if (item.fromUser == this.props.userName) {
+                    if (item.toUser == this.props.userName) {
                         chatRecord.push(item);
                     }
                 })
             }
 
-            console.log("chatRecord.length"+chatRecord.length);
+            chatRecord.sort(function(a, b){
+                return a.time < b.time ? -1 : 1;
+            });
+            // console.log("chatRecord.length" + chatRecord.length);
             // console.log(JSON.stringify(this.props.message))
-            if (chatRecord.length != 0) {
+            //如果chatRecord的长度不为0，将当前用户与选中用户的聊天记录放到displayBox，当前用户与选中用户的聊天记录，放到右边；选中用户与当前用户的聊天记录，放到左边
+            if (chatRecord.length) {
+                let userMessage;
+
+                userMessage = chatRecord.map((item, index) => {
+                    if (item.fromUser == this.props.userName && item.toUser == this.props.toUser) {
+                        return <RightDisplay message={item.message}/>
+                    } else if (item.toUser == this.props.userName && item.fromUser == this.props.toUser){
+                        return <LeftDisplay message={item.message}/>
+                    }
+                })
                 return (
                     <div className='displayBox'>
-                        好开心啊！
+                        {userMessage}
                     </div>
                 )
             } else {
