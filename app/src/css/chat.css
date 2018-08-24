@@ -38,6 +38,18 @@ textarea::-webkit-scrollbar {
     align-items: center;
     justify-content: space-between;
 }
+.avatarBox{
+    display: flex;
+    position: relative;
+}
+#uploadImg{
+    width: 3rem;
+    height: 3rem;
+    position: absolute;
+    overflow: hidden;
+    opacity: 0;
+    /*display: none;*/
+}
 
 .search {
     width: 100%;

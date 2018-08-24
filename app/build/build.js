@@ -16303,6 +16303,10 @@ var _userList = __webpack_require__(140);
 
 var _userList2 = _interopRequireDefault(_userList);
 
+var _userInfo = __webpack_require__(266);
+
+var _userInfo2 = _interopRequireDefault(_userInfo);
+
 var _reactRouterDom = __webpack_require__(19);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -16319,18 +16323,6 @@ var cookieFunction = __webpack_require__(77);
 
 // 事件周期
 
-function UserInfo(props) {
-    return _react2.default.createElement(
-        'div',
-        { className: 'userBox' },
-        _react2.default.createElement(
-            'div',
-            { className: 'userName' },
-            props.userName
-        ),
-        _react2.default.createElement('img', { className: 'userAvatar', src: props.userAvatar, alt: '\u6211\u662F\u5934\u50CF' })
-    );
-}
 
 var Chat = function (_React$Component) {
     _inherits(Chat, _React$Component);
@@ -16435,7 +16427,7 @@ var Chat = function (_React$Component) {
                 _react2.default.createElement(
                     'div',
                     { id: 'userInfoBox' },
-                    _react2.default.createElement(UserInfo, {
+                    _react2.default.createElement(_userInfo2.default, {
                         userName: this.state.onlineUser,
                         userAvatar: this.state.userAvatar }),
                     _react2.default.createElement(_userList2.default, {
@@ -34717,6 +34709,91 @@ module.exports = function(module) {
 /***/ (function(module, exports) {
 
 /* (ignored) */
+
+/***/ }),
+/* 266 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UserInfo = function (_Component) {
+    _inherits(UserInfo, _Component);
+
+    function UserInfo(props) {
+        _classCallCheck(this, UserInfo);
+
+        return _possibleConstructorReturn(this, (UserInfo.__proto__ || Object.getPrototypeOf(UserInfo)).call(this, props));
+        // this.uploadImgClick = this.uploadImgClick.bind(this)
+    }
+
+    _createClass(UserInfo, [{
+        key: 'handleClick',
+        value: function handleClick() {}
+
+        // uploadImgClick() {
+        //     console.log(this + ":this")
+        // }
+
+    }, {
+        key: 'chooseImg',
+        value: function chooseImg(event) {
+            var file = event.target.files[0];
+            if (window.FileReader) {
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                //监听文件读取结束后事件
+                reader.onloadend = function (e) {
+                    // $("#"+num).attr("src",e.target.result);    //e.target.result就是最后的路径地址
+                    // console.log("file："+ e.target.result);
+                    document.getElementById('userAvatar').src = e.target.result;
+                };
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'userBox' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'userName' },
+                    this.props.userName
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'avatarBox' },
+                    _react2.default.createElement('img', { id: 'userAvatar', className: 'userAvatar', src: '', alt: '\u6211\u662F\u5934\u50CF',
+                        onClick: this.handleClick() }),
+                    _react2.default.createElement('input', { id: 'uploadImg', type: 'file', onChange: this.chooseImg.bind(this) })
+                )
+            );
+        }
+    }]);
+
+    return UserInfo;
+}(_react.Component);
+
+exports.default = UserInfo;
 
 /***/ })
 /******/ ]);

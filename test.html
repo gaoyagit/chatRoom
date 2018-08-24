@@ -1,110 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
+    <title>Demo</title>
     <style type="text/css">
-        #showImg img{
-            width:100px;
+        div {
+            position: relative;
+        }
+
+        img {
             height: 100px;
+            width: 100px;
+        }
+
+        input {
+            opacity: 0;
+            filter: alpha(opacity=0);
+            height: 100px;
+            width: 100px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 9;
         }
     </style>
 </head>
 <body>
-<input type="file" class="upfile" name="img" id="input"/>
-<div id="showImg"></div>
-</body>
-<script type="text/javascript">
-
-    var url = "https://www.baidu.com/s?ie=utf-8&f=3&rsv_bp=1&tn=baidu&wd=json.parse"
-    var search = url.slice(url.indexOf('?')+1);
-    var searchArray = search.split('&');
-    var searchObj = [];
-
-    searchArray.forEach(function (item,index) {
-        var key = item.split("=")[0];
-        var value = item.split("=")[1];
-        searchObj.push({
-            key:value
-        })
-    })
-
-    for (var i = 0;i<searchObj.length;i++){
-        console.log(searchObj[i].key+":"+searchObj[i].value);
-    }
-    console.log("url.location.search:"+search);
-
-
-    var url = "http://www.taobao.com/index.php?key0=0&key1=1";
-    var obj = parseQueryString(url);
-    function parseQueryString(argu){
-        var str = argu.split('?')[1];
-        var result = {};
-        var temp = str.split('&');
-
-        for(var i=0; i<temp.length; i++)
-        {
-            var temp2 = temp[i].split('=');
-            result[temp2[0]] = temp2[1];
-
-        }
-        return result;
+<div>
+    <input id="f" type="file" onchange="chooseImg(this)" style="opacity:0">
+    <img id="img" width="40" height="40" onclick="f.click()">
+</div>
+<script>
+    function chooseImg(file) {
+        var file = file.files[0];
+        // FileReader对象允许Web应用程序异步读取存储在用户计算机上的文件（或原始数据缓冲区）的内容，使用 File 或 Blob 对象指定要读取的文件或数据
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            var img = document.getElementById('img');
+            img.src = this.result
+        };
     }
 
-    console.log(obj);
-
-
-
-    function getFileUrl(sourceId) {
-        var url;
-        if (navigator.userAgent.indexOf("MSIE") >= 1) { // IE
-            url = sourceId.value;
-        } else if (navigator.userAgent.indexOf("Firefox") > 0) { // Firefox
-            url = window.URL.createObjectURL(sourceId.files.item(0));
-        } else if (navigator.userAgent.indexOf("Chrome") > 0) { // Chrome
-            url = window.URL.createObjectURL(sourceId.files.item(0));
-        }
-        return url;
-    };
-
-    var oImg=document.createElement('img');
-    var showImg = document.getElementById("showImg");
-    showImg.appendChild(oImg);
-    document.getElementById('input').onchange =function(){
-        oImg.src = getFileUrl(this);
-    }
-
-    console.log((new Date()).toLocaleString());
-
-    var test = {"gaoya":{"userName":"gaoya"},"大黄":{"userName":"大黄"}}
-    for(let item in test){
-        console.log(item+" : "+ test[item].userName);
-    }
-    // console.log(Object.keys(test))
-
-    var array = [1,12,34,56,78];
-    var arr = array.filter((item)=>{
-        return item != 12;
-    }).map((item)=>{
-        console.log(item+": "+item)
-    })
-    console.log(arr);
-
-    var aa =[];
-    if (aa){
-        console.log("1111");
-    }else {
-        console.log("2222");
-    }
-
-const obj={
-        "gaoya":123,
-    "xiaobai":123,
-    "xiaohei":134,
-
-}
-
-delete obj["gaoya"]
-    console.log(Object.keys(obj).length)
 
 </script>
+</body>
 </html>

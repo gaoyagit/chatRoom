@@ -2,6 +2,7 @@ import React from 'react';
 import InputBox from './inputBox'
 import DisplayBox from './displayBox'
 import UserList from './userList'
+import UserInfo from './userInfo'
 import {Link} from 'react-router-dom'
 // import io from 'socket.io-client';
 // const socket = io.connect('http://localhost:3000');
@@ -9,14 +10,7 @@ const cookieFunction = require('../../../cookie.js')
 
 // 事件周期
 
-function UserInfo(props) {
-    return (
-        <div className='userBox'>
-            <div className='userName'>{props.userName}</div>
-            <img className='userAvatar' src={props.userAvatar} alt='我是头像'></img>
-        </div>
-    )
-}
+
 
 
 export default class Chat extends React.Component {
