@@ -16323,7 +16323,6 @@ var cookieFunction = __webpack_require__(77);
 
 // 事件周期
 
-
 var Chat = function (_React$Component) {
     _inherits(Chat, _React$Component);
 
@@ -17310,12 +17309,13 @@ var UserInfo = function (_Component) {
                     _this.props.userAvatarChange({
                         src: document.getElementById('userAvatar').src
                     });
+
+                    _this.props.socket.emit('changeAvatar', {
+                        userName: _this.props.userName,
+                        avatar: e.target.result
+                    });
                 };
             }
-            this.props.socket.emit('changeAvatar', {
-                userName: this.props.userName,
-                avatar: ''
-            });
         }
     }, {
         key: 'render',

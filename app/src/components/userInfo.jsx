@@ -26,13 +26,15 @@ export default class UserInfo extends Component {
                     src:document.getElementById('userAvatar').src,
                 })
 
+                _this.props.socket.emit('changeAvatar', {
+                    userName: _this.props.userName,
+                    avatar: e.target.result,
+                })
+
 
             };
         }
-        this.props.socket.emit('changeAvatar', {
-            userName: this.props.userName,
-            avatar: '',
-        })
+
 
     }
 

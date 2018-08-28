@@ -9,10 +9,6 @@ import {Link} from 'react-router-dom'
 const cookieFunction = require('../../../cookie.js')
 
 // 事件周期
-
-
-
-
 export default class Chat extends React.Component {
 
     constructor(props) {
