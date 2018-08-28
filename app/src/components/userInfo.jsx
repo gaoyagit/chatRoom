@@ -6,7 +6,7 @@ export default class UserInfo extends Component {
     constructor(props) {
         super(props)
         // this.uploadImgClick = this.uploadImgClick.bind(this)
-        console.log("this.props:"+ Object.keys(this.props));
+        // console.log("this.props:"+ Object.keys(this.props));
     }
 
 
@@ -20,7 +20,7 @@ export default class UserInfo extends Component {
             //监听文件读取结束后事件
             reader.onloadend = function (e) {
                 document.getElementById('userAvatar').src = e.target.result;
-                console.log("e.target.result:"+e.target.result)
+                // console.log("e.target.result:"+e.target.result)
 
                 _this.props.userAvatarChange({
                     src:document.getElementById('userAvatar').src,
@@ -28,10 +28,7 @@ export default class UserInfo extends Component {
 
 
             };
-
         }
-
-        // console.log("this.props"+JSON.stringify(this));
         this.props.socket.emit('changeAvatar', {
             userName: this.props.userName,
             avatar: '',

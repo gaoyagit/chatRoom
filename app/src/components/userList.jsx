@@ -17,13 +17,14 @@ export default class UserList extends Component {
 
         this.state = {
             checkedList: checkedList,
+            // count: this.props.count,//显示未读消息的数量；
+            // flag:0,//信息是否已读，未读设为0，已读设为1
         }
     }
 
     componentDidMount(){
         console.log("this.props.onlineUserList"+this.props.onlineUserList);
         console.log("this.props.onlineUser"+this.props.onlineUser);
-
         console.log(Object.keys(this.props.onlineUserList).length + "  " + "checkedList");
 
     }
@@ -36,8 +37,12 @@ export default class UserList extends Component {
         this.state.checkedList[userName] = true;
         this.setState({
             checkedList: this.state.checkedList,
+            // count: 0,
         })
         this.props.toUserChange(userName);
+
+        this.props.resetCountArray(userName);
+
     }
 
     render() {
@@ -60,7 +65,12 @@ export default class UserList extends Component {
                             return (
                                 <div className='onlineUser' onClick={this.handleClick.bind(this, userName)}
                                      style={rowStyle}>
-                                    <img src={this.props.onlineUserList[userName].avatar}>&nbsp;&nbsp;{userName}</img>
+                                    <div className='imgInfo'>
+                                        <img src={this.props.onlineUserList[userName].avatar}>&nbsp;&nbsp;{userName}</img>
+                                    </div>
+                                    <div className='messageCount'>{
+                                        this.props.countArray[userName].count ? this.props.countArray[userName].count : null
+                                    }</div>
                                 </div>
                             )
                         })

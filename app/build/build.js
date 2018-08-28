@@ -16338,19 +16338,36 @@ var Chat = function (_React$Component) {
             receiveData: {},
             onlineUserList: {},
             toUser: '', //当前用户和谁在聊天，显示聊天记录
-            toUserAvatar: '' //保存选中用户的头像
+            toUserAvatar: '', //保存选中用户的头像
+            countArray: [] //存放不同用户的未读消息的数量以及消息来源用户，如gaoya：{fromUser：gaoya，count：2}；
         };
 
         //将当前touser设为userlist列表中的第一个用户
         _this2.props.socket.on('loginUserList', function (data) {
+            Object.keys(data.userList).map(function (item, index) {
+                if (!_this2.state.countArray[item]) {
+                    _this2.state.countArray[item] = {
+                        fromUser: item.userName,
+                        count: 0
+                    };
+                }
+            });
+
             _this2.setState({
-                onlineUserList: data.userList
+                onlineUserList: data.userList,
+                countArray: _this2.state.countArray
             });
         });
 
         _this2.props.socket.on('receiveMessage', function (data) {
+            if (data.fromUser) {
+                _this2.state.countArray[data.fromUser].count++;
+                console.log("this.state.countArray[data.fromUser].count++:" + _this2.state.countArray[data.fromUser].count);
+            }
+
             _this2.setState({
-                receiveData: data.receiveData
+                receiveData: data.receiveData,
+                countArray: _this2.state.countArray
             });
         });
 
@@ -16378,11 +16395,7 @@ var Chat = function (_React$Component) {
                         onlineUser: JSON.parse(xmlhttp.responseText).userName,
                         userAvatar: JSON.parse(xmlhttp.responseText).userAvatar
 
-                    }, function () {
-                        // console.log("this.state.onlineUser:"+ _this.state.onlineUser)
-                        // console.log("this.state.onlineUser:"+ _this.state.userAvatar)
                     });
-                    // console.log(xmlhttp.responseText);
                 }
 
                 if (_this.state.onlineUser) {
@@ -16410,7 +16423,7 @@ var Chat = function (_React$Component) {
         key: 'toUserChange',
         value: function toUserChange(toUser) {
 
-            console.log("this.state.onlineUserList[toUser].avatar" + this.state.onlineUserList[toUser].avatar);
+            // console.log("this.state.onlineUserList[toUser].avatar"+this.state.onlineUserList[toUser].avatar);
             // console.log("toUser"+toUser);
             this.setState({
                 toUser: toUser,
@@ -16425,6 +16438,14 @@ var Chat = function (_React$Component) {
         value: function userAvatarChange(data) {
             this.setState({
                 userAvatar: data.src
+            });
+        }
+    }, {
+        key: 'resetCountArray',
+        value: function resetCountArray(userName) {
+            this.state.countArray[userName].count = 0;
+            this.setState({
+                countArray: this.state.countArray
             });
         }
     }, {
@@ -16446,7 +16467,10 @@ var Chat = function (_React$Component) {
                     _react2.default.createElement(_userList2.default, {
                         onlineUserList: this.state.onlineUserList,
                         toUserChange: this.toUserChange.bind(this),
-                        onlineUser: this.state.onlineUser })
+                        onlineUser: this.state.onlineUser,
+                        countArray: this.state.countArray,
+                        resetCountArray: this.resetCountArray.bind(this)
+                    })
                 ),
                 _react2.default.createElement(
                     'div',
@@ -16915,7 +16939,7 @@ var DisplayBox = function (_Component) {
                         if (item.fromUser == _this2.props.userName && item.toUser == _this2.props.toUser) {
                             return _react2.default.createElement(_rightDisplay2.default, { message: item.message, fromUserAvatar: _this2.props.userAvatar });
                         } else if (item.toUser == _this2.props.userName && item.fromUser == _this2.props.toUser) {
-                            console.log("this.props.toUserAvatar" + _this2.props.toUserAvatar);
+                            // console.log("this.props.toUserAvatar"+this.props.toUserAvatar)
                             return _react2.default.createElement(_leftDisplay2.default, { message: item.message, toUserAvatar: _this2.props.toUserAvatar });
                         }
                     });
@@ -17265,11 +17289,9 @@ var UserInfo = function (_Component) {
     function UserInfo(props) {
         _classCallCheck(this, UserInfo);
 
+        return _possibleConstructorReturn(this, (UserInfo.__proto__ || Object.getPrototypeOf(UserInfo)).call(this, props));
         // this.uploadImgClick = this.uploadImgClick.bind(this)
-        var _this2 = _possibleConstructorReturn(this, (UserInfo.__proto__ || Object.getPrototypeOf(UserInfo)).call(this, props));
-
-        console.log("this.props:" + Object.keys(_this2.props));
-        return _this2;
+        // console.log("this.props:"+ Object.keys(this.props));
     }
 
     _createClass(UserInfo, [{
@@ -17283,15 +17305,13 @@ var UserInfo = function (_Component) {
                 //监听文件读取结束后事件
                 reader.onloadend = function (e) {
                     document.getElementById('userAvatar').src = e.target.result;
-                    console.log("e.target.result:" + e.target.result);
+                    // console.log("e.target.result:"+e.target.result)
 
                     _this.props.userAvatarChange({
                         src: document.getElementById('userAvatar').src
                     });
                 };
             }
-
-            // console.log("this.props"+JSON.stringify(this));
             this.props.socket.emit('changeAvatar', {
                 userName: this.props.userName,
                 avatar: ''
@@ -17367,6 +17387,8 @@ var UserList = function (_Component) {
 
         _this.state = {
             checkedList: checkedList
+            // count: this.props.count,//显示未读消息的数量；
+            // flag:0,//信息是否已读，未读设为0，已读设为1
         };
         return _this;
     }
@@ -17376,7 +17398,6 @@ var UserList = function (_Component) {
         value: function componentDidMount() {
             console.log("this.props.onlineUserList" + this.props.onlineUserList);
             console.log("this.props.onlineUser" + this.props.onlineUser);
-
             console.log(Object.keys(this.props.onlineUserList).length + "  " + "checkedList");
         }
     }, {
@@ -17390,8 +17411,11 @@ var UserList = function (_Component) {
             this.state.checkedList[userName] = true;
             this.setState({
                 checkedList: this.state.checkedList
+                // count: 0,
             });
             this.props.toUserChange(userName);
+
+            this.props.resetCountArray(userName);
         }
     }, {
         key: "render",
@@ -17416,10 +17440,19 @@ var UserList = function (_Component) {
                         { className: "onlineUser", onClick: _this3.handleClick.bind(_this3, userName),
                             style: rowStyle },
                         _react2.default.createElement(
-                            "img",
-                            { src: _this3.props.onlineUserList[userName].avatar },
-                            "\xA0\xA0",
-                            userName
+                            "div",
+                            { className: "imgInfo" },
+                            _react2.default.createElement(
+                                "img",
+                                { src: _this3.props.onlineUserList[userName].avatar },
+                                "\xA0\xA0",
+                                userName
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "div",
+                            { className: "messageCount" },
+                            _this3.props.countArray[userName].count ? _this3.props.countArray[userName].count : null
                         )
                     );
                 })

@@ -63,11 +63,15 @@ textarea::-webkit-scrollbar {
     height: 3.5rem;
     /*line-height: 3.5rem;*/
     border-bottom: 1px solid gray;
+    justify-content:space-between;
 }
 
 /*.onlineUser:hover {*/
     /*background-color: #333333;*/
 /*}*/
+.messageCount{
+    margin-right: 1rem;
+}
 
 #informationBox {
     /*width: 70%;*/

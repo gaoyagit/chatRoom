@@ -70,7 +70,9 @@ io.on('connection', function (socket) {
             //返回所有的聊天记录
             const receiveMessage = JSON.parse(fs.readFileSync('./config/message.json', 'utf-8'));
             socket.emit('receiveMessage', {
-                receiveData: receiveMessage
+                receiveData: receiveMessage,
+                fromUser:'',//初始化
+
             })
 
             
@@ -137,7 +139,8 @@ io.on('connection', function (socket) {
             //如果toUser在onlineUsersSocket中，将向toUser发送接收消息的命令
             if (onlineUsersSocket[messageData.toUser]){
                 onlineUsersSocket[messageData.toUser].emit("receiveMessage",{
-                    receiveData: messageInfo
+                    receiveData: messageInfo,
+                    fromUser:messageData.fromUser,//该条消息的发送方
                 })
             }
 
