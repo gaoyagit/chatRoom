@@ -14,9 +14,11 @@ export default class InputBox extends Component {
             inputText: '',
         }
 
+
         // this.props.socket.on('inputSuccess', function (data) {
         //     alert(data.msg);
         // })
+
     }
 
     handleInput() {
@@ -26,6 +28,7 @@ export default class InputBox extends Component {
             fromUser: this.props.userName,
             toUser: this.props.toUser,
         })
+
         this.props.socket.emit('sendMessage', {
             message: this.state.message,
             time: this.state.time,

@@ -1,13 +1,18 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
+import io from 'socket.io-client';
 
 export default class UserInfo extends Component {
     constructor(props) {
         super(props)
         // this.uploadImgClick = this.uploadImgClick.bind(this)
+        console.log("this.props:"+ Object.keys(this.props));
     }
 
 
+
     chooseImg(event) {
+        var _this = this;
         var file = event.target.files[0]
         if (window.FileReader) {
             var reader = new FileReader();
@@ -16,16 +21,23 @@ export default class UserInfo extends Component {
             reader.onloadend = function (e) {
                 document.getElementById('userAvatar').src = e.target.result;
                 console.log("e.target.result:"+e.target.result)
+
+                _this.props.userAvatarChange({
+                    src:document.getElementById('userAvatar').src,
+                })
+
+
             };
+
         }
 
-        this.props.userAvatarChange({
-            src:document.getElementById('userAvatar').src,
+        // console.log("this.props"+JSON.stringify(this));
+        this.props.socket.emit('changeAvatar', {
+            userName: this.props.userName,
+            avatar: '',
         })
 
-        console.log("document.getElementById('userAvatar').src:"+document.getElementById('userAvatar').src);
     }
-
 
     render() {
         return (

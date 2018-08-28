@@ -39,6 +39,7 @@ export default class Chat extends React.Component {
                 }
             )
         })
+
     }
 
 
@@ -99,12 +100,10 @@ export default class Chat extends React.Component {
     }
 
     //更改头像
-    userAvatarChange(src){
+    userAvatarChange(data){
         this.setState({
-            userAvatar: src,
+            userAvatar:data.src
         })
-
-        console.log(src);
     }
 
     render() {
@@ -114,6 +113,7 @@ export default class Chat extends React.Component {
                     <UserInfo
                         userName={this.state.onlineUser}
                         userAvatar={this.state.userAvatar}
+                        socket={this.props.socket}
                         userAvatarChange={this.userAvatarChange.bind(this)}/>
                     <UserList
                         onlineUserList={this.state.onlineUserList}

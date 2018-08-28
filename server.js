@@ -73,6 +73,7 @@ io.on('connection', function (socket) {
                 receiveData: receiveMessage
             })
 
+            
 
             io.emit('loginUserList', {
                 msg: '所有在线用户信息',
@@ -166,6 +167,27 @@ io.on('connection', function (socket) {
             userList: onlineList,
         })
     });
+    //更改头像
+    socket.on('changeAvatar',function (data) {
+        // const onlineUserList = JSON.parse(fs.readFileSync('./config/onlineList.json', 'utf-8'));
+        // const userInfo = JSON.parse(fs.readFileSync('./config/userInfo.json', 'utf-8'));
+        //
+        // if(data.userName){
+        //     if(onlineUserList[data.userName]){
+        //         onlineUserList[data.userName].avatar = data.avatar;
+        //     }
+        //
+        //     if(userInfo[data.userName]){
+        //         userInfo[data.userName].avatar = data.avatar;
+        //     }
+        // }
+        //
+        // fs.writeFileSync('./config/onlineList.json', new Buffer(JSON.stringify(onlineUserList)))
+        // fs.writeFileSync('./config/userInfo.json', new Buffer(JSON.stringify(userInfo)))
+
+        console.log("我可以收到数据！")
+
+    })
 
 
 });
