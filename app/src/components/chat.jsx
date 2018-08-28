@@ -98,13 +98,23 @@ export default class Chat extends React.Component {
         })
     }
 
+    //更改头像
+    userAvatarChange(src){
+        this.setState({
+            userAvatar: src,
+        })
+
+        console.log(src);
+    }
+
     render() {
         return (
             <div id="chatBox">
                 <div id='userInfoBox'>
                     <UserInfo
                         userName={this.state.onlineUser}
-                        userAvatar={this.state.userAvatar}/>
+                        userAvatar={this.state.userAvatar}
+                        userAvatarChange={this.userAvatarChange.bind(this)}/>
                     <UserList
                         onlineUserList={this.state.onlineUserList}
                         toUserChange={this.toUserChange.bind(this)}

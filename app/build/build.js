@@ -16416,6 +16416,18 @@ var Chat = function (_React$Component) {
                 toUserAvatar: this.state.onlineUserList[toUser].avatar
             });
         }
+
+        //更改头像
+
+    }, {
+        key: 'userAvatarChange',
+        value: function userAvatarChange(src) {
+            this.setState({
+                userAvatar: src
+            });
+
+            console.log(src);
+        }
     }, {
         key: 'render',
         value: function render() {
@@ -16429,7 +16441,8 @@ var Chat = function (_React$Component) {
                     { id: 'userInfoBox' },
                     _react2.default.createElement(_userInfo2.default, {
                         userName: this.state.onlineUser,
-                        userAvatar: this.state.userAvatar }),
+                        userAvatar: this.state.userAvatar,
+                        userAvatarChange: this.userAvatarChange.bind(this) }),
                     _react2.default.createElement(_userList2.default, {
                         onlineUserList: this.state.onlineUserList,
                         toUserChange: this.toUserChange.bind(this),
@@ -34746,14 +34759,6 @@ var UserInfo = function (_Component) {
     }
 
     _createClass(UserInfo, [{
-        key: 'handleClick',
-        value: function handleClick() {}
-
-        // uploadImgClick() {
-        //     console.log(this + ":this")
-        // }
-
-    }, {
         key: 'chooseImg',
         value: function chooseImg(event) {
             var file = event.target.files[0];
@@ -34762,11 +34767,16 @@ var UserInfo = function (_Component) {
                 reader.readAsDataURL(file);
                 //监听文件读取结束后事件
                 reader.onloadend = function (e) {
-                    // $("#"+num).attr("src",e.target.result);    //e.target.result就是最后的路径地址
-                    // console.log("file："+ e.target.result);
                     document.getElementById('userAvatar').src = e.target.result;
+                    console.log("e.target.result:" + e.target.result);
                 };
             }
+
+            this.props.userAvatarChange({
+                src: document.getElementById('userAvatar').src
+            });
+
+            console.log("document.getElementById('userAvatar').src:" + document.getElementById('userAvatar').src);
         }
     }, {
         key: 'render',
@@ -34782,8 +34792,7 @@ var UserInfo = function (_Component) {
                 _react2.default.createElement(
                     'div',
                     { className: 'avatarBox' },
-                    _react2.default.createElement('img', { id: 'userAvatar', className: 'userAvatar', src: '', alt: '\u6211\u662F\u5934\u50CF',
-                        onClick: this.handleClick() }),
+                    _react2.default.createElement('img', { id: 'userAvatar', className: 'userAvatar', src: this.props.userAvatar, alt: '\u6211\u662F\u5934\u50CF' }),
                     _react2.default.createElement('input', { id: 'uploadImg', type: 'file', onChange: this.chooseImg.bind(this) })
                 )
             );

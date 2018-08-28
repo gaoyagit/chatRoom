@@ -4,31 +4,19 @@
     <meta charset="utf-8">
     <title>Demo</title>
     <style type="text/css">
-        div {
-            position: relative;
-        }
-
-        img {
-            height: 100px;
-            width: 100px;
-        }
-
-        input {
-            opacity: 0;
-            filter: alpha(opacity=0);
-            height: 100px;
-            width: 100px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 9;
-        }
+        #content{overflow:hidden;}
+        .left{width:200px; margin-bottom:-3000px; padding-bottom:3000px; background:#cad5eb; float:left;}
+        /*.right{width:400px; margin-bottom:-3000px; padding-bottom:3000px; background:#f0f3f9; float:right;}*/
+        .center{margin:0 410px 0 210px; background:#ffe6b8; height:600px;}
     </style>
 </head>
 <body>
-<div>
-    <input id="f" type="file" onchange="chooseImg(this)" style="opacity:0">
-    <img id="img" width="40" height="40" onclick="f.click()">
+<div id="content">
+    <div class="left">左边，无高度属性，自适应于最高一栏的高度</div>
+    <!--<div class="right">右边，无高度属性，自适应于最高一栏的高度</div>-->
+    <div class="center">中间，高度600像素，左右两栏的高度与之自适应
+        <div>hhhhjkk</div>
+    </div>
 </div>
 <script>
     function chooseImg(file) {
@@ -42,6 +30,9 @@
         };
     }
 
+    var array=[1,2,3,4,5];
+    array.shift(6);
+    console.log(array[0]);
 
 </script>
 </body>
