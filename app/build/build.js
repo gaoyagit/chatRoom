@@ -17312,7 +17312,7 @@ var UserInfo = function (_Component) {
 
                     _this.props.socket.emit('changeAvatar', {
                         userName: _this.props.userName,
-                        avatar: e.target.result
+                        avatar: document.getElementById('userAvatar').src
                     });
                 };
             }

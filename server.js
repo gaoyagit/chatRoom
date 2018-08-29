@@ -7,13 +7,13 @@ const querystring = require('querystring');
 const util = require('util');
 const fs = require('fs');
 var router = express.Router();
-const loginInfo = JSON.parse(fs.readFileSync('./config/userInfo.json', 'utf-8'));
 
 app.use('/', router);
 app.use(express.static('app'));
 
 // 处理get请求
 router.get('/geCookie', function (req, res) {
+    const loginInfo = JSON.parse(fs.readFileSync('./config/userInfo.json', 'utf-8'));
     var reqInfo = req.param('userName');//解析用户名
     var cookieInfo = loginInfo[reqInfo];//找到该用户的所有信息
     res.send({
@@ -21,6 +21,7 @@ router.get('/geCookie', function (req, res) {
         'userAvatar': cookieInfo.avatar
     });
 });
+
 
 // 在线用户信息
 const onlineUsersList = [];
@@ -31,7 +32,7 @@ io.on('connection', function (socket) {
     // console.log(socket.name)
     socket.on('login', function (user) {
         // vain为用户名密码为空，success为成功，error为用户名密码错误
-        const loginInfo = JSON.parse(fs.readFileSync('./config/userInfo.json', 'utf-8'));//所有用户的信息
+        const loginUserInfo = JSON.parse(fs.readFileSync('./config/userInfo.json', 'utf-8'));//所有用户的信息
         //登录时的聊天数据值
 
         if (!user.userName || !user.userPassword) {
@@ -39,7 +40,7 @@ io.on('connection', function (socket) {
                 type: 'vain',
                 message: '账号或者密码为空!'
             });
-        } else if (loginInfo[user.userName] != undefined && loginInfo[user.userName].password == user.userPassword) {
+        } else if (loginUserInfo[user.userName] != undefined && loginUserInfo[user.userName].password == user.userPassword) {
             //如果onlineUsersSocket对象中没有当前用户的socket值，将当前用户的socket放入onlineUsersSocket中
             socket.userName = user.userName;
             if (!onlineUsersSocket[user.userName]){
@@ -52,7 +53,7 @@ io.on('connection', function (socket) {
             if (!onlineUserList[user.userName]) {
                 onlineUserList[user.userName] = {
                     "userName": user.userName,
-                    "avatar": loginInfo[user.userName].avatar
+                    "avatar": loginUserInfo[user.userName].avatar
                 }
             }
 
@@ -172,23 +173,23 @@ io.on('connection', function (socket) {
     });
     //更改头像
     socket.on('changeAvatar',function (data) {
-        const onlineUserList = JSON.parse(fs.readFileSync('./config/onlineList.json', 'utf-8'));
-        const userInfo = JSON.parse(fs.readFileSync('./config/userInfo.json', 'utf-8'));
+        //所有在线用户的信息
+        const allOnlineList = JSON.parse(fs.readFileSync('./config/onlineList.json', 'utf-8'));
+        //所有用户信息
+        const allUserInfo = JSON.parse(fs.readFileSync('./config/userInfo.json', 'utf-8'));
 
         if(data.userName){
-            if(onlineUserList[data.userName]){
-                onlineUserList[data.userName].avatar = data.avatar;
+            if(allOnlineList[data.userName]){
+                allOnlineList[data.userName].avatar = data.avatar;
             }
 
-            if(userInfo[data.userName]){
-                userInfo[data.userName].avatar = data.avatar;
+            if(allUserInfo[data.userName]){
+                allUserInfo[data.userName].avatar = data.avatar;
             }
         }
 
-        fs.writeFileSync('./config/onlineList.json', new Buffer(JSON.stringify(onlineUserList)))
-        fs.writeFileSync('./config/userInfo.json', new Buffer(JSON.stringify(userInfo)))
-
-        console.log("我可以收到数据！")
+        fs.writeFileSync('./config/onlineList.json', new Buffer(JSON.stringify(allOnlineList)))
+        fs.writeFileSync('./config/userInfo.json', new Buffer(JSON.stringify(allUserInfo)))
 
     })
 
